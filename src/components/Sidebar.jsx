@@ -25,7 +25,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       path: "/",
     },
     {
-      name: "Analytics",
+      name: "User & Role Management",
       icon: (
         <svg
           className="w-5 h-5"
@@ -37,14 +37,14 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={2}
-            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
           />
         </svg>
       ),
-      path: "/analytics",
+      path: "/users",
     },
     {
-      name: "Portfolio",
+      name: "Product Management",
       icon: (
         <svg
           className="w-5 h-5"
@@ -56,14 +56,14 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={2}
-            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
           />
         </svg>
       ),
-      path: "/portfolio",
+      path: "/products",
     },
     {
-      name: "Transactions",
+      name: "Warehouse Management",
       icon: (
         <svg
           className="w-5 h-5"
@@ -75,11 +75,163 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={2}
-            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
           />
         </svg>
       ),
-      path: "/transactions",
+      path: "/warehouses",
+    },
+    {
+      name: "Stock Management",
+      icon: (
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+          />
+        </svg>
+      ),
+      path: "/stock",
+    },
+    {
+      name: "Supplier Management",
+      icon: (
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+          />
+        </svg>
+      ),
+      path: "/suppliers",
+    },
+    {
+      name: "Purchase Management",
+      icon: (
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+          />
+        </svg>
+      ),
+      path: "/purchases",
+    },
+    {
+      name: "Sales Management",
+      icon: (
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+          />
+        </svg>
+      ),
+      path: "/sales",
+    },
+    {
+      name: "Transfer Management",
+      icon: (
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+          />
+        </svg>
+      ),
+      path: "/transfers",
+    },
+    {
+      name: "Reports & Analytics",
+      icon: (
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 17v1m3-9v1m6 7v1m-6 0h6m-6 0l-3-3m0 0l-3 3m3-3V7m0 10V7"
+          />
+        </svg>
+      ),
+      path: "/reports",
+    },
+    {
+      name: "Notifications & Alerts",
+      icon: (
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+          />
+        </svg>
+      ),
+      path: "/notifications",
+    },
+    {
+      name: "Audit & Logs",
+      icon: (
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          />
+        </svg>
+      ),
+      path: "/audit",
     },
     {
       name: "Settings",
@@ -128,19 +280,19 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       >
         <div className="flex flex-col h-full">
           {/* Logo */}
-          <div className="flex items-center h-16 px-6 border-b border-gray-200 dark:border-gray-700">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">S</span>
+          <div className="flex items-center h-14 px-4 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center space-x-2">
+              <div className="w-7 h-7 bg-primary-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">S</span>
               </div>
-              <span className="text-xl font-semibold text-gray-900 dark:text-white">
+              <span className="text-lg font-semibold text-gray-900 dark:text-white hidden sm:block">
                 SarmayaYab
               </span>
             </div>
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 px-4 py-6 space-y-2">
+          <nav className="flex-1 px-3 py-4 space-y-1">
             {menuItems.map((item) => {
               const isActive = location.pathname === item.path;
               return (
@@ -154,7 +306,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                     }
                   }}
                   className={`
-                    flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors duration-200
+                    flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors duration-200 text-sm
                     ${
                       isActive
                         ? "bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400"
@@ -162,26 +314,28 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                     }
                   `}
                 >
-                  {item.icon}
-                  <span className="font-medium">{item.name}</span>
+                  <span className="w-4 h-4 flex-shrink-0">{item.icon}</span>
+                  <span className="font-medium truncate hidden sm:block">
+                    {item.name}
+                  </span>
                 </Link>
               );
             })}
           </nav>
 
           {/* User section */}
-          <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center">
-                <span className="text-gray-600 dark:text-gray-300 font-medium">
+          <div className="p-3 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-gray-300 dark:bg-gray-600 rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="text-gray-600 dark:text-gray-300 font-medium text-sm">
                   U
                 </span>
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+              <div className="flex-1 min-w-0 hidden sm:block">
+                <p className="text-xs font-medium text-gray-900 dark:text-white truncate">
                   User Name
                 </p>
-                <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                   user@example.com
                 </p>
               </div>
