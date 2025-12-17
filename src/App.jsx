@@ -159,19 +159,6 @@ function App() {
                   }
                 />
                 <Route
-                  path="/notifications"
-                  element={
-                    <div className="p-6">
-                      <h1 className="text-2xl font-bold">
-                        Notifications & Alerts
-                      </h1>
-                      <p className="text-gray-600 dark:text-gray-400">
-                        Manage system notifications and alerts
-                      </p>
-                    </div>
-                  }
-                />
-                <Route
                   path="/audit"
                   element={
                     <div className="p-6">
