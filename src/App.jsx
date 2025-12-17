@@ -7,22 +7,44 @@ import Dashboard from "./components/Dashboard";
 import DarkModeToggle from "./components/DarkModeToggle";
 
 function App() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(() => {
+    // Set initial state based on screen size
+    if (typeof window !== "undefined") {
+      return window.innerWidth >= 1024;
+    }
+    return false;
+  });
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
+  // Close sidebar on window resize to desktop if it was closed
+  React.useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setSidebarOpen(true);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <DarkModeProvider>
       <Router>
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex">
           <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
 
-          <div className="lg:ml-64">
+          <div
+            className={`flex-1 flex flex-col transition-all duration-300 ease-in-out ${
+              sidebarOpen ? "lg:ml-0" : "lg:ml-0"
+            }`}
+          >
             <Navbar toggleSidebar={toggleSidebar} isSidebarOpen={sidebarOpen} />
 
-            <main className="p-6">
+            <main className="flex-1 p-6">
               <Routes>
                 <Route path="/" element={<Dashboard />} />
                 <Route
