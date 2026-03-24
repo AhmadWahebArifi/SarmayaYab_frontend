@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { DarkModeProvider } from "./contexts/DarkModeContext";
 import Sidebar from "./components/Sidebar";
-import Navbar from "./components/Navbar";
-import Dashboard from "./components/Dashboard";
-import DarkModeToggle from "./components/DarkModeToggle";
+import AdminDashboard from "./components/AdminDashboard";
+import ProductCatalog from "./components/ProductCatalog";
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(() => {
@@ -34,7 +33,7 @@ function App() {
   return (
     <DarkModeProvider>
       <Router>
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex">
+        <div className="min-h-screen bg-surface flex">
           <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
 
           <div
@@ -42,11 +41,10 @@ function App() {
               sidebarOpen ? "lg:ml-0" : "lg:ml-0"
             }`}
           >
-            <Navbar toggleSidebar={toggleSidebar} isSidebarOpen={sidebarOpen} />
-
-            <main className="flex-1 p-6">
+            <main className="flex-1">
               <Routes>
-                <Route path="/" element={<Dashboard />} />
+                <Route path="/" element={<AdminDashboard />} />
+                <Route path="/products" element={<ProductCatalog />} />
                 <Route
                   path="/users"
                   element={
@@ -56,17 +54,6 @@ function App() {
                       </h1>
                       <p className="text-gray-600 dark:text-gray-400">
                         Manage users, roles, and permissions
-                      </p>
-                    </div>
-                  }
-                />
-                <Route
-                  path="/products"
-                  element={
-                    <div className="p-6">
-                      <h1 className="text-2xl font-bold">Product Management</h1>
-                      <p className="text-gray-600 dark:text-gray-400">
-                        Manage products, categories, and pricing
                       </p>
                     </div>
                   }
