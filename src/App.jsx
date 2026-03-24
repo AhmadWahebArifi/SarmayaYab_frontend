@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { DarkModeProvider } from "./contexts/DarkModeContext";
+import { DarkModeProvider } from "./contexts/DarkModeProvider";
 import Sidebar from "./components/Sidebar";
 import AdminDashboard from "./components/AdminDashboard";
 import ProductCatalog from "./components/ProductCatalog";
+import BranchManagement from "./components/BranchManagement";
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(() => {
@@ -45,6 +46,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<AdminDashboard />} />
                 <Route path="/products" element={<ProductCatalog />} />
+                <Route path="/warehouses" element={<BranchManagement />} />
                 <Route
                   path="/users"
                   element={
