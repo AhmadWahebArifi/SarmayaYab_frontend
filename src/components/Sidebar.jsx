@@ -11,59 +11,24 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       path: "/",
     },
     {
-      name: "User & Role Management",
-      icon: "manage_accounts",
-      path: "/users",
-    },
-    {
       name: "Product Management",
       icon: "inventory_2",
       path: "/products",
     },
     {
-      name: "Warehouse Management",
-      icon: "warehouse",
+      name: "Branch Management",
+      icon: "storefront",
       path: "/warehouses",
     },
     {
-      name: "Stock Management",
+      name: "Stock Requests",
       icon: "assignment_return",
       path: "/stock",
-    },
-    {
-      name: "Supplier Management",
-      icon: "local_shipping",
-      path: "/suppliers",
-    },
-    {
-      name: "Purchase Management",
-      icon: "shopping_cart",
-      path: "/purchases",
-    },
-    {
-      name: "Sales Management",
-      icon: "point_of_sale",
-      path: "/sales",
-    },
-    {
-      name: "Transfer Management",
-      icon: "swap_horiz",
-      path: "/transfers",
     },
     {
       name: "Reports & Analytics",
       icon: "analytics",
       path: "/reports",
-    },
-    {
-      name: "Audit & Logs",
-      icon: "history",
-      path: "/audit",
-    },
-    {
-      name: "Settings",
-      icon: "settings",
-      path: "/settings",
     },
   ];
 
