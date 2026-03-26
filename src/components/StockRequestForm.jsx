@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useLoader } from "../contexts/LoaderProvider";
+import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 
 const StockRequestForm = ({ onSubmit, initialData = {} }) => {
   const { showLoader, hideLoader } = useLoader();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     priority: "normal",
     expected_delivery_date: "",
@@ -108,15 +110,24 @@ const StockRequestForm = ({ onSubmit, initialData = {} }) => {
       showLoader("Creating stock request...", true);
 
       const requestData = {
-        ...formData,
-        items: formData.items.map(({ product_id, requested_qty }) => ({
-          product_id,
-          requested_qty,
+        priority: formData.priority,
+        expected_delivery_date: formData.expected_delivery_date,
+        reason: formData.reason,
+        cost_center: formData.cost_center,
+        note: formData.note,
+        items: formData.items.map((item) => ({
+          product_id: item.product_id,
+          requested_qty: item.requested_qty,
         })),
       };
 
       const res = await api.post("/stock-requests", requestData);
+
+      // Call onSubmit if provided (for backward compatibility)
       onSubmit && onSubmit(res.data);
+
+      // Navigate to stock page after successful submission
+      navigate("/stock");
     } catch (error) {
       console.error("Error creating request:", error);
       alert("Failed to create stock request. Please try again.");
