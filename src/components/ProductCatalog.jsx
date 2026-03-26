@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDarkMode } from "../contexts/DarkModeProvider";
+import { useAuth } from "../contexts/AuthProvider";
+import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 import {
   Search,
@@ -13,6 +15,17 @@ import {
 
 const ProductCatalog = () => {
   const { darkMode } = useDarkMode();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  // Check if user has permission to access product catalog
+  useEffect(() => {
+    if (user && user.role !== "admin" && user.role !== "warehouse_staff") {
+      navigate("/dashboard");
+      return;
+    }
+  }, [user, navigate]);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
