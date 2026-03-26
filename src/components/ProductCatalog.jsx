@@ -12,7 +12,7 @@ import {
 } from "@mui/icons-material";
 
 const ProductCatalog = () => {
-  const { isDarkMode } = useDarkMode();
+  const { darkMode } = useDarkMode();
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
