@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Suspense, lazy, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -9,15 +9,23 @@ import {
 import { DarkModeProvider } from "./contexts/DarkModeProvider";
 import { AuthProvider, useAuth } from "./contexts/AuthProvider";
 import Sidebar from "./components/Sidebar";
-import AdminDashboard from "./components/AdminDashboard";
-import InventoryDashboard from "./components/InventoryDashboard";
-import ProductCatalog from "./components/ProductCatalog";
-import BranchManagement from "./components/BranchManagement";
-import StockRequestsList from "./components/StockRequestsList";
-import StockRequestForm from "./components/StockRequestForm";
-import Login from "./components/Login";
-import NotFound from "./components/NotFound";
-import AccessDenied from "./components/AccessDenied";
+import ProtectedRoute from "./components/ProtectedRoute";
+import LoadingSpinner from "./components/LoadingSpinner";
+import { preloadAllComponents } from "./utils/preloadUtils";
+
+// Lazy load components
+const AdminDashboard = lazy(() => import("./components/AdminDashboard"));
+const InventoryDashboard = lazy(
+  () => import("./components/InventoryDashboard"),
+);
+const ProductCatalog = lazy(() => import("./components/ProductCatalog"));
+const BranchManagement = lazy(() => import("./components/BranchManagement"));
+const StockRequestsList = lazy(() => import("./components/StockRequestsList"));
+const StockRequestForm = lazy(() => import("./components/StockRequestForm"));
+const ReportsPage = lazy(() => import("./components/ReportsPage"));
+const SettingsPage = lazy(() => import("./components/SettingsPage"));
+const Login = lazy(() => import("./components/Login"));
+const NotFound = lazy(() => import("./components/NotFound"));
 
 const RequireAuth = ({ children }) => {
   const { user, loading } = useAuth();
@@ -32,21 +40,16 @@ const RequireAuth = ({ children }) => {
   return children;
 };
 
-function App() {
-  const [sidebarOpen, setSidebarOpen] = useState(() => {
-    if (typeof window !== "undefined") {
-      return window.innerWidth >= 1024;
-    }
-    return false;
-  });
+const App = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
+  // Start preloading components after initial mount
+  useEffect(() => {
+    preloadAllComponents();
+  }, []);
 
-  const closeSidebar = () => {
-    setSidebarOpen(false);
-  };
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+  const closeSidebar = () => setSidebarOpen(false);
 
   React.useEffect(() => {
     const handleResize = () => {
@@ -66,8 +69,25 @@ function App() {
       <DarkModeProvider>
         <Router>
           <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/access-denied" element={<AccessDenied />} />
+            <Route
+              path="/login"
+              element={
+                <Suspense fallback={<LoadingSpinner text="Loading login..." />}>
+                  <Login />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/access-denied"
+              element={
+                <div className="p-6">
+                  <h1 className="text-2xl font-bold">Access Denied</h1>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    You don't have permission to access this page.
+                  </p>
+                </div>
+              }
+            />
             <Route
               path="/*"
               element={
@@ -99,57 +119,103 @@ function App() {
                       </header>
 
                       <main className="flex-1">
-                        <Routes>
-                          <Route
-                            path="/"
-                            element={<Navigate to="/dashboard" replace />}
-                          />
-                          <Route
-                            path="/dashboard"
-                            element={<InventoryDashboard />}
-                          />
-                          <Route
-                            path="/products"
-                            element={<ProductCatalog />}
-                          />
-                          <Route
-                            path="/warehouses"
-                            element={<BranchManagement />}
-                          />
-                          <Route
-                            path="/stock"
-                            element={<StockRequestsList />}
-                          />
-                          <Route
-                            path="/stock/new"
-                            element={<StockRequestForm />}
-                          />
-                          <Route
-                            path="/reports"
-                            element={
-                              <div className="p-6">
-                                <h1 className="text-2xl font-bold">
-                                  Reports & Analytics
-                                </h1>
-                                <p className="text-gray-600 dark:text-gray-400">
-                                  View reports and analytics
-                                </p>
-                              </div>
-                            }
-                          />
-                          <Route
-                            path="/settings"
-                            element={
-                              <div className="p-6">
-                                <h1 className="text-2xl font-bold">Settings</h1>
-                                <p className="text-gray-600 dark:text-gray-400">
-                                  System configuration and settings
-                                </p>
-                              </div>
-                            }
-                          />
-                          <Route path="*" element={<NotFound />} />
-                        </Routes>
+                        <Suspense
+                          fallback={
+                            <LoadingSpinner text="Loading dashboard..." />
+                          }
+                        >
+                          <Routes>
+                            <Route
+                              path="/"
+                              element={<Navigate to="/dashboard" replace />}
+                            />
+                            <Route
+                              path="/dashboard"
+                              element={<InventoryDashboard />}
+                            />
+                            <Route
+                              path="/products"
+                              element={
+                                <Suspense
+                                  fallback={
+                                    <LoadingSpinner text="Loading product catalog..." />
+                                  }
+                                >
+                                  <ProtectedRoute
+                                    allowedRoles={["admin", "warehouse_staff"]}
+                                  >
+                                    <ProductCatalog />
+                                  </ProtectedRoute>
+                                </Suspense>
+                              }
+                            />
+                            <Route
+                              path="/warehouses"
+                              element={
+                                <Suspense
+                                  fallback={
+                                    <LoadingSpinner text="Loading branch management..." />
+                                  }
+                                >
+                                  <ProtectedRoute
+                                    allowedRoles={["admin", "warehouse_staff"]}
+                                  >
+                                    <BranchManagement />
+                                  </ProtectedRoute>
+                                </Suspense>
+                              }
+                            />
+                            <Route
+                              path="/stock"
+                              element={
+                                <Suspense
+                                  fallback={
+                                    <LoadingSpinner text="Loading stock requests..." />
+                                  }
+                                >
+                                  <StockRequestsList />
+                                </Suspense>
+                              }
+                            />
+                            <Route
+                              path="/stock/new"
+                              element={
+                                <Suspense
+                                  fallback={
+                                    <LoadingSpinner text="Loading request form..." />
+                                  }
+                                >
+                                  <StockRequestForm />
+                                </Suspense>
+                              }
+                            />
+                            <Route
+                              path="/reports"
+                              element={
+                                <Suspense
+                                  fallback={
+                                    <LoadingSpinner text="Loading reports..." />
+                                  }
+                                >
+                                  <ReportsPage />
+                                </Suspense>
+                              }
+                            />
+                            <Route
+                              path="/settings"
+                              element={
+                                <Suspense
+                                  fallback={
+                                    <LoadingSpinner text="Loading settings..." />
+                                  }
+                                >
+                                  <SettingsPage />
+                                </Suspense>
+                              }
+                            />
+                            <Route path="*" element={<NotFound />} />
+                          </Routes>
+                        </Suspense>
                       </main>
                     </div>
                   </div>
@@ -161,6 +227,6 @@ function App() {
       </DarkModeProvider>
     </AuthProvider>
   );
-}
+};
 
 export default App;
