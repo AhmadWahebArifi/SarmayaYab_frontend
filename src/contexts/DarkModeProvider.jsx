@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { DarkModeContext } from "./darkModeContext";
 
 export const DarkModeProvider = ({ children }) => {
@@ -29,4 +29,12 @@ export const DarkModeProvider = ({ children }) => {
       {children}
     </DarkModeContext.Provider>
   );
+};
+
+export const useDarkMode = () => {
+  const context = useContext(DarkModeContext);
+  if (!context) {
+    throw new Error("useDarkMode must be used within a DarkModeProvider");
+  }
+  return context;
 };
