@@ -10,9 +10,11 @@ import { DarkModeProvider } from "./contexts/DarkModeProvider";
 import { AuthProvider, useAuth } from "./contexts/AuthProvider";
 import Sidebar from "./components/Sidebar";
 import AdminDashboard from "./components/AdminDashboard";
+import InventoryDashboard from "./components/InventoryDashboard";
 import ProductCatalog from "./components/ProductCatalog";
 import BranchManagement from "./components/BranchManagement";
-import StockRequests from "./components/StockRequests";
+import StockRequestsList from "./components/StockRequestsList";
+import StockRequestForm from "./components/StockRequestForm";
 import Login from "./components/Login";
 import NotFound from "./components/NotFound";
 import AccessDenied from "./components/AccessDenied";
@@ -104,7 +106,7 @@ function App() {
                           />
                           <Route
                             path="/dashboard"
-                            element={<AdminDashboard />}
+                            element={<InventoryDashboard />}
                           />
                           <Route
                             path="/products"
@@ -114,7 +116,14 @@ function App() {
                             path="/warehouses"
                             element={<BranchManagement />}
                           />
-                          <Route path="/stock" element={<StockRequests />} />
+                          <Route
+                            path="/stock"
+                            element={<StockRequestsList />}
+                          />
+                          <Route
+                            path="/stock/new"
+                            element={<StockRequestForm />}
+                          />
                           <Route
                             path="/reports"
                             element={
