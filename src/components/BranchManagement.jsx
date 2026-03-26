@@ -1,6 +1,19 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
+import { useAuth } from "../contexts/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 const BranchManagement = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  // Check if user has permission to access branch management
+  useEffect(() => {
+    if (user && user.role !== "admin" && user.role !== "warehouse_staff") {
+      navigate("/dashboard");
+      return;
+    }
+  }, [user, navigate]);
+
   const [activeView, setActiveView] = useState("grid");
   const [region, setRegion] = useState("All Global Sites");
 
@@ -33,7 +46,7 @@ const BranchManagement = () => {
         suffixClassName: "text-error font-bold",
       },
     ],
-    []
+    [],
   );
 
   const branches = useMemo(
@@ -42,7 +55,10 @@ const BranchManagement = () => {
         id: 1,
         name: "Berlin Hub East",
         location: "Friedrichshain, Berlin, DE",
-        status: { label: "Active", className: "bg-tertiary-fixed text-on-tertiary-fixed-variant" },
+        status: {
+          label: "Active",
+          className: "bg-tertiary-fixed text-on-tertiary-fixed-variant",
+        },
         stockLevel: "12,450",
         requests: "18",
         requestsTone: "text-error",
@@ -54,7 +70,10 @@ const BranchManagement = () => {
         id: 2,
         name: "London Logistics",
         location: "Canary Wharf, London, UK",
-        status: { label: "Active", className: "bg-tertiary-fixed text-on-tertiary-fixed-variant" },
+        status: {
+          label: "Active",
+          className: "bg-tertiary-fixed text-on-tertiary-fixed-variant",
+        },
         stockLevel: "8,200",
         requests: "0",
         requestsTone: "text-on-tertiary-container",
@@ -82,7 +101,10 @@ const BranchManagement = () => {
         id: 4,
         name: "New York Hub",
         location: "Manhattan, NY, USA",
-        status: { label: "Active", className: "bg-tertiary-fixed text-on-tertiary-fixed-variant" },
+        status: {
+          label: "Active",
+          className: "bg-tertiary-fixed text-on-tertiary-fixed-variant",
+        },
         stockLevel: "15,900",
         requests: "5",
         requestsTone: "text-on-surface",
@@ -91,7 +113,7 @@ const BranchManagement = () => {
           "https://lh3.googleusercontent.com/aida-public/AB6AXuAC3go5mz8I1lVfK5Jl-4IN0z7wzWYG0FfEoIR4GQ0ZhRySvXOtp_q-U0Nkvgse-431MYRmTmvitzuFdnefTZPZBAWIELB5r06Jf28QYg8OkFT8oD8oWc0iw-iok9e-24GcABJcExPnl27imfwPsq_PqzH_xyXLlSukv6LstPzp4zIeuSY42YCuh7TfmHA_6M59_L5mro5QJNNSGI1cY9xG2y9nstuF5pnsFPCknAbn4_LXO-Lexz1P8tb8i8kotZad1egGixrTfNhC",
       },
     ],
-    []
+    [],
   );
 
   return (
@@ -168,7 +190,8 @@ const BranchManagement = () => {
                 {s.suffix ? (
                   <span
                     className={`${
-                      s.suffixClassName || "text-on-surface-variant text-xs font-medium"
+                      s.suffixClassName ||
+                      "text-on-surface-variant text-xs font-medium"
                     }`}
                   >
                     {s.suffix}
@@ -192,7 +215,9 @@ const BranchManagement = () => {
                       : "text-on-surface-variant px-4 py-1.5 rounded-sm text-xs font-bold flex items-center gap-2 hover:bg-surface-container-high transition-all"
                   }
                 >
-                  <span className="material-symbols-outlined text-sm">grid_view</span>
+                  <span className="material-symbols-outlined text-sm">
+                    grid_view
+                  </span>
                   Grid
                 </button>
                 <button
@@ -360,7 +385,9 @@ const BranchManagement = () => {
                 <div className="flex gap-4">
                   <div className="mt-1 w-2 h-2 rounded-full bg-error flex-shrink-0"></div>
                   <div>
-                    <p className="text-xs font-bold">Alert: Tokyo Critical Stock</p>
+                    <p className="text-xs font-bold">
+                      Alert: Tokyo Critical Stock
+                    </p>
                     <p className="text-[11px] text-on-surface-variant font-body mt-0.5">
                       Stock dropped below 15% threshold for 12 SKUs.
                     </p>
