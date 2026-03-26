@@ -14,6 +14,8 @@ import ProductCatalog from "./components/ProductCatalog";
 import BranchManagement from "./components/BranchManagement";
 import StockRequests from "./components/StockRequests";
 import Login from "./components/Login";
+import NotFound from "./components/NotFound";
+import AccessDenied from "./components/AccessDenied";
 
 const RequireAuth = ({ children }) => {
   const { user, loading } = useAuth();
@@ -63,6 +65,7 @@ function App() {
         <Router>
           <Routes>
             <Route path="/login" element={<Login />} />
+            <Route path="/access-denied" element={<AccessDenied />} />
             <Route
               path="/*"
               element={
@@ -95,7 +98,14 @@ function App() {
 
                       <main className="flex-1">
                         <Routes>
-                          <Route path="/" element={<AdminDashboard />} />
+                          <Route
+                            path="/"
+                            element={<Navigate to="/dashboard" replace />}
+                          />
+                          <Route
+                            path="/dashboard"
+                            element={<AdminDashboard />}
+                          />
                           <Route
                             path="/products"
                             element={<ProductCatalog />}
@@ -129,6 +139,7 @@ function App() {
                               </div>
                             }
                           />
+                          <Route path="*" element={<NotFound />} />
                         </Routes>
                       </main>
                     </div>
