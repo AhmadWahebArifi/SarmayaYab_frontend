@@ -5,11 +5,11 @@ export const preloadComponent = (componentImport) => {
       const component = await componentImport();
       return component;
     } catch (error) {
-      console.error('Error preloading component:', error);
+      console.error("Error preloading component:", error);
       return null;
     }
   };
-  
+
   // Start preloading in background
   componentLoader();
 };
@@ -17,7 +17,7 @@ export const preloadComponent = (componentImport) => {
 // Preload critical components when user hovers over navigation items
 export const preloadOnHover = (componentImport) => {
   let preloaded = false;
-  
+
   return () => {
     if (!preloaded) {
       preloaded = true;
@@ -30,14 +30,15 @@ export const preloadOnHover = (componentImport) => {
 export const preloadAllComponents = () => {
   setTimeout(() => {
     // Preload frequently accessed components
-    preloadComponent(() => import('./components/StockRequestsList'));
-    preloadComponent(() => import('./components/InventoryDashboard'));
-    
+    preloadComponent(() => import("../components/StockRequestsList"));
+    preloadComponent(() => import("../components/InventoryDashboard"));
+    preloadComponent(() => import("../components/SupportPage"));
+
     // Preload admin/warehouse components if user has appropriate role
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (user?.role === 'admin' || user?.role === 'warehouse_staff') {
-      preloadComponent(() => import('./components/ProductCatalog'));
-      preloadComponent(() => import('./components/BranchManagement'));
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user?.role === "admin" || user?.role === "warehouse_staff") {
+      preloadComponent(() => import("../components/ProductCatalog"));
+      preloadComponent(() => import("../components/BranchManagement"));
     }
   }, 2000); // Start preloading after 2 seconds
 };

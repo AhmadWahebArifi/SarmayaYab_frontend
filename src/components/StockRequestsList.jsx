@@ -3,6 +3,7 @@ import { useLoader } from "../contexts/LoaderProvider";
 import { useAuth } from "../contexts/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+import Loader from "./Loader";
 
 const StockRequestsList = () => {
   const { showLoader, hideLoader } = useLoader();
@@ -154,7 +155,9 @@ const StockRequestsList = () => {
   };
 
   if (loading) {
-    return <div className="p-6">Loading stock requests...</div>;
+    return (
+      <Loader message="Loading Stock Requests..." showBackground={false} />
+    );
   }
 
   return (
