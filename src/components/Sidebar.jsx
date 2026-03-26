@@ -40,6 +40,9 @@ const Sidebar = ({ isOpen, toggleSidebar, closeSidebar }) => {
   const preloadSettings = preloadOnHover(
     () => import("../components/SettingsPage"),
   );
+  const preloadSupport = preloadOnHover(
+    () => import("../components/SupportPage"),
+  );
 
   const menuItems = [
     { path: "/", icon: Home, label: "Dashboard", onHover: preloadDashboard },
@@ -158,6 +161,7 @@ const Sidebar = ({ isOpen, toggleSidebar, closeSidebar }) => {
                   closeSidebar();
                 }
               }}
+              onMouseEnter={preloadSupport}
             >
               <Support className="w-5 h-5" />
               <span className="font-medium">Support</span>
