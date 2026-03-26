@@ -16,7 +16,7 @@ import {
 } from "@mui/icons-material";
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
-  const { isDarkMode } = useDarkMode();
+  const { darkMode } = useDarkMode();
   const { user, logout } = useAuth();
   const location = useLocation();
 
