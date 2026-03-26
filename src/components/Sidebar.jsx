@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useDarkMode } from "../contexts/DarkModeProvider";
 import { useAuth } from "../contexts/AuthProvider";
+import { preloadOnHover } from "../utils/preloadUtils";
 import {
   Home,
   Inventory,
@@ -20,13 +21,62 @@ const Sidebar = ({ isOpen, toggleSidebar, closeSidebar }) => {
   const { user, logout } = useAuth();
   const location = useLocation();
 
+  // Preload functions for hover optimization
+  const preloadDashboard = preloadOnHover(
+    () => import("../components/InventoryDashboard"),
+  );
+  const preloadProducts = preloadOnHover(
+    () => import("../components/ProductCatalog"),
+  );
+  const preloadBranches = preloadOnHover(
+    () => import("../components/BranchManagement"),
+  );
+  const preloadStock = preloadOnHover(
+    () => import("../components/StockRequestsList"),
+  );
+  const preloadReports = preloadOnHover(
+    () => import("../components/ReportsPage"),
+  );
+  const preloadSettings = preloadOnHover(
+    () => import("../components/SettingsPage"),
+  );
+
   const menuItems = [
-    { path: "/", icon: Home, label: "Dashboard" },
-    { path: "/products", icon: Inventory, label: "Product Catalog" },
-    { path: "/warehouses", icon: Warehouse, label: "Branch Management" },
-    { path: "/stock", icon: RequestQuote, label: "Stock Requests" },
-    { path: "/reports", icon: Assessment, label: "Reports" },
-    { path: "/settings", icon: Settings, label: "Settings" },
+    { path: "/", icon: Home, label: "Dashboard", onHover: preloadDashboard },
+    ...(user?.role === "admin" || user?.role === "warehouse_staff"
+      ? [
+          {
+            path: "/products",
+            icon: Inventory,
+            label: "Product Catalog",
+            onHover: preloadProducts,
+          },
+          {
+            path: "/warehouses",
+            icon: Warehouse,
+            label: "Branch Management",
+            onHover: preloadBranches,
+          },
+        ]
+      : []),
+    {
+      path: "/stock",
+      icon: RequestQuote,
+      label: "Stock Requests",
+      onHover: preloadStock,
+    },
+    {
+      path: "/reports",
+      icon: Assessment,
+      label: "Reports",
+      onHover: preloadReports,
+    },
+    {
+      path: "/settings",
+      icon: Settings,
+      label: "Settings",
+      onHover: preloadSettings,
+    },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -86,6 +136,7 @@ const Sidebar = ({ isOpen, toggleSidebar, closeSidebar }) => {
                       closeSidebar();
                     }
                   }}
+                  onMouseEnter={item.onHover}
                 >
                   <Icon className="w-5 h-5" />
                   <span className="font-medium">{item.label}</span>
@@ -120,6 +171,9 @@ const Sidebar = ({ isOpen, toggleSidebar, closeSidebar }) => {
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                     {user?.name || "User"}
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                    {user?.email || "No email"}
                   </p>
                   <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                     {user?.role || "Unknown"}
