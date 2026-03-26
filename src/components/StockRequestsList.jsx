@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLoader } from "../contexts/LoaderProvider";
 import { useAuth } from "../contexts/AuthProvider";
 import { useNavigate } from "react-router-dom";
+import api from "../services/api";
 
 const StockRequestsList = () => {
   const { showLoader, hideLoader } = useLoader();
@@ -17,6 +18,9 @@ const StockRequestsList = () => {
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
 
+  const isBranchUser =
+    typeof user?.role === "string" && user.role.startsWith("branch_");
+
   useEffect(() => {
     fetchRequests();
   }, [filters]);
@@ -30,14 +34,9 @@ const StockRequestsList = () => {
       if (filters.priority) queryParams.append("priority", filters.priority);
       if (filters.branch) queryParams.append("branch_id", filters.branch);
 
-      const response = await fetch(`/api/stock-requests?${queryParams}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-
-      const data = await response.json();
-      setRequests(data.data || data);
+      const res = await api.get(`/stock-requests?${queryParams.toString()}`);
+      const payload = res.data;
+      setRequests(payload?.data || payload || []);
     } catch (error) {
       console.error("Error fetching requests:", error);
     } finally {
@@ -49,27 +48,16 @@ const StockRequestsList = () => {
     try {
       showLoader("Approving request...", true);
 
-      const response = await fetch(`/api/stock-requests/${requestId}/approve`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
-          items: items.map((item) => ({
-            product_id: item.product_id,
-            approved_qty: item.approved_qty || item.requested_qty,
-          })),
-          approval_notes: "Approved via dashboard",
-        }),
+      await api.post(`/stock-requests/${requestId}/approve`, {
+        items: items.map((item) => ({
+          product_id: item.product_id,
+          approved_qty: item.approved_qty || item.requested_qty,
+        })),
+        approval_notes: "Approved via dashboard",
       });
 
-      if (response.ok) {
-        fetchRequests();
-        setShowDetails(false);
-      } else {
-        throw new Error("Failed to approve request");
-      }
+      fetchRequests();
+      setShowDetails(false);
     } catch (error) {
       console.error("Error approving request:", error);
       alert("Failed to approve request");
@@ -82,23 +70,12 @@ const StockRequestsList = () => {
     try {
       showLoader("Rejecting request...", true);
 
-      const response = await fetch(`/api/stock-requests/${requestId}/reject`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
-          rejection_reason: reason,
-        }),
+      await api.post(`/stock-requests/${requestId}/reject`, {
+        rejection_reason: reason,
       });
 
-      if (response.ok) {
-        fetchRequests();
-        setShowDetails(false);
-      } else {
-        throw new Error("Failed to reject request");
-      }
+      fetchRequests();
+      setShowDetails(false);
     } catch (error) {
       console.error("Error rejecting request:", error);
       alert("Failed to reject request");
@@ -111,22 +88,10 @@ const StockRequestsList = () => {
     try {
       showLoader("Dispatching request...", true);
 
-      const response = await fetch(
-        `/api/stock-requests/${requestId}/dispatch`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        },
-      );
+      await api.post(`/stock-requests/${requestId}/dispatch`);
 
-      if (response.ok) {
-        fetchRequests();
-        setShowDetails(false);
-      } else {
-        throw new Error("Failed to dispatch request");
-      }
+      fetchRequests();
+      setShowDetails(false);
     } catch (error) {
       console.error("Error dispatching request:", error);
       alert("Failed to dispatch request");
@@ -139,19 +104,10 @@ const StockRequestsList = () => {
     try {
       showLoader("Marking as delivered...", true);
 
-      const response = await fetch(`/api/stock-requests/${requestId}/deliver`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      await api.post(`/stock-requests/${requestId}/deliver`);
 
-      if (response.ok) {
-        fetchRequests();
-        setShowDetails(false);
-      } else {
-        throw new Error("Failed to mark as delivered");
-      }
+      fetchRequests();
+      setShowDetails(false);
     } catch (error) {
       console.error("Error marking as delivered:", error);
       alert("Failed to mark as delivered");
@@ -163,32 +119,32 @@ const StockRequestsList = () => {
   const getStatusColor = (status) => {
     switch (status) {
       case "pending":
-        return "text-warning bg-warning-container";
+        return "text-yellow-900 bg-yellow-100 border border-yellow-200 dark:text-yellow-100 dark:bg-yellow-900/30 dark:border-yellow-700";
       case "approved":
-        return "text-primary bg-primary-container";
+        return "text-blue-900 bg-blue-100 border border-blue-200 dark:text-blue-100 dark:bg-blue-900/30 dark:border-blue-700";
       case "dispatched":
-        return "text-info bg-info-container";
+        return "text-cyan-900 bg-cyan-100 border border-cyan-200 dark:text-cyan-100 dark:bg-cyan-900/30 dark:border-cyan-700";
       case "delivered":
-        return "text-success bg-success-container";
+        return "text-green-900 bg-green-100 border border-green-200 dark:text-green-100 dark:bg-green-900/30 dark:border-green-700";
       case "rejected":
-        return "text-error bg-error-container";
+        return "text-red-900 bg-red-100 border border-red-200 dark:text-red-100 dark:bg-red-900/30 dark:border-red-700";
       default:
-        return "text-on-surface bg-surface-container";
+        return "text-gray-700 bg-gray-100 border border-gray-200 dark:text-gray-300 dark:bg-gray-800/50 dark:border-gray-600";
     }
   };
 
   const getPriorityColor = (priority) => {
     switch (priority) {
       case "urgent":
-        return "text-error bg-error-container";
+        return "text-red-900 bg-red-100 border border-red-200 dark:text-red-100 dark:bg-red-900/30 dark:border-red-700";
       case "high":
-        return "text-warning bg-warning-container";
+        return "text-orange-900 bg-orange-100 border border-orange-200 dark:text-orange-100 dark:bg-orange-900/30 dark:border-orange-700";
       case "normal":
-        return "text-primary bg-primary-container";
+        return "text-blue-900 bg-blue-100 border border-blue-200 dark:text-blue-100 dark:bg-blue-900/30 dark:border-blue-700";
       case "low":
-        return "text-secondary bg-secondary-container";
+        return "text-gray-600 bg-gray-100 border border-gray-200 dark:text-gray-300 dark:bg-gray-800/50 dark:border-gray-600";
       default:
-        return "text-on-surface bg-surface-container";
+        return "text-gray-700 bg-gray-100 border border-gray-200 dark:text-gray-300 dark:bg-gray-800/50 dark:border-gray-600";
     }
   };
 
@@ -211,6 +167,16 @@ const StockRequestsList = () => {
             Manage and track inventory requests
           </p>
         </div>
+        {/* Show Create New Request button only for branch users */}
+        {isBranchUser && (
+          <button
+            onClick={() => navigate("/stock/new")}
+            className="px-4 py-2 bg-primary text-on-primary rounded-lg hover:opacity-90 flex items-center gap-2"
+          >
+            <span className="material-symbols-outlined">add</span>
+            Create New Request
+          </button>
+        )}
       </div>
 
       {/* Filters */}
@@ -274,125 +240,215 @@ const StockRequestsList = () => {
       </div>
 
       {/* Requests List */}
-      <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/20">
+      <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
         <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-surface-container">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-on-surface-variant uppercase tracking-wider">
-                  Request Code
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-on-surface-variant uppercase tracking-wider">
-                  Branch
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-on-surface-variant uppercase tracking-wider">
-                  Items
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-on-surface-variant uppercase tracking-wider">
-                  Value
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-on-surface-variant uppercase tracking-wider">
-                  Priority
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-on-surface-variant uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-on-surface-variant uppercase tracking-wider">
-                  Created
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-on-surface-variant uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-outline-variant/10">
-              {requests.length > 0 ? (
-                requests.map((request) => (
-                  <tr key={request.id} className="hover:bg-surface-container">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="font-medium text-on-surface">
+          <div className="min-w-full">
+            <div className="hidden lg:block">
+              <table className="w-full">
+                <thead className="bg-surface-container">
+                  <tr>
+                    <th className="px-4 lg:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                      Request Code
+                    </th>
+                    <th className="px-4 lg:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                      Branch
+                    </th>
+                    <th className="px-4 lg:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                      Items
+                    </th>
+                    <th className="px-4 lg:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                      Value
+                    </th>
+                    <th className="px-4 lg:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                      Priority
+                    </th>
+                    <th className="px-4 lg:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                      Status
+                    </th>
+                    <th className="px-4 lg:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider hidden xl:table-cell">
+                      Created
+                    </th>
+                    <th className="px-4 lg:px-6 py-3 text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-outline-variant/10">
+                  {requests.length > 0 ? (
+                    requests.map((request) => (
+                      <tr
+                        key={request.id}
+                        className="hover:bg-surface-container"
+                      >
+                        <td className="px-4 lg:px-6 py-4 whitespace-nowrap">
+                          <span className="font-semibold text-gray-900 dark:text-gray-100 text-sm">
+                            {request.code}
+                          </span>
+                        </td>
+                        <td className="px-4 lg:px-6 py-4 whitespace-nowrap">
+                          <span className="text-sm text-gray-600 dark:text-gray-400">
+                            {request.branch?.name}
+                          </span>
+                        </td>
+                        <td className="px-4 lg:px-6 py-4 whitespace-nowrap">
+                          <span className="text-sm text-gray-900 dark:text-gray-100 font-medium">
+                            {request.items?.length || 0} items
+                          </span>
+                        </td>
+                        <td className="px-4 lg:px-6 py-4 whitespace-nowrap">
+                          <span className="text-sm font-bold text-gray-900 dark:text-gray-100">
+                            ${parseFloat(request.total_value || 0).toFixed(2)}
+                          </span>
+                        </td>
+                        <td className="px-4 lg:px-6 py-4 whitespace-nowrap">
+                          <span
+                            className={`inline-flex px-2 py-1 rounded-full text-xs font-semibold ${getPriorityColor(request.priority)}`}
+                          >
+                            {request.priority || "normal"}
+                          </span>
+                        </td>
+                        <td className="px-4 lg:px-6 py-4 whitespace-nowrap">
+                          <span
+                            className={`inline-flex px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(request.status)}`}
+                          >
+                            {request.status}
+                          </span>
+                        </td>
+                        <td className="px-4 lg:px-6 py-4 whitespace-nowrap hidden xl:table-cell">
+                          <span className="text-sm text-gray-600 dark:text-gray-400">
+                            {new Date(request.created_at).toLocaleDateString()}
+                          </span>
+                        </td>
+                        <td className="px-4 lg:px-6 py-4 whitespace-nowrap">
+                          <button
+                            onClick={() => viewRequestDetails(request)}
+                            className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-semibold transition-colors"
+                          >
+                            View Details
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan="8"
+                        className="px-6 py-12 text-center text-gray-500 dark:text-gray-400"
+                      >
+                        <div className="flex flex-col items-center">
+                          <span className="text-lg font-medium">
+                            No stock requests found
+                          </span>
+                          <span className="text-sm mt-1">
+                            Try adjusting your filters or create a new request
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="lg:hidden space-y-4 p-4">
+              {requests.map((request) => (
+                <div
+                  key={request.id}
+                  className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 shadow-sm"
+                >
+                  <div className="flex justify-between items-start mb-3">
+                    <div>
+                      <h3 className="font-semibold text-gray-900 dark:text-gray-100">
                         {request.code}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm text-on-surface-variant">
+                      </h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
                         {request.branch?.name}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm text-on-surface">
-                        {request.items?.length || 0} items
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm font-medium text-on-surface">
-                        ${(request.total_value || 0).toFixed(2)}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                      </p>
+                    </div>
+                    <div className="flex flex-col gap-2 items-end">
                       <span
-                        className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(request.priority)}`}
+                        className={`inline-flex px-2 py-1 rounded-full text-xs font-semibold ${getPriorityColor(request.priority)}`}
                       >
                         {request.priority || "normal"}
                       </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
                       <span
-                        className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(request.status)}`}
+                        className={`inline-flex px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(request.status)}`}
                       >
                         {request.status}
                       </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm text-on-surface-variant">
-                        {new Date(request.created_at).toLocaleDateString()}
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4 mb-3">
+                    <div>
+                      <span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        Items
                       </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <button
-                        onClick={() => viewRequestDetails(request)}
-                        className="text-primary hover:text-primary-hover text-sm font-medium"
-                      >
-                        View Details
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan="8"
-                    className="px-6 py-12 text-center text-on-surface-variant"
-                  >
-                    No stock requests found
-                  </td>
-                </tr>
+                      <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                        {request.items?.length || 0} items
+                      </p>
+                    </div>
+                    <div>
+                      <span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        Value
+                      </span>
+                      <p className="text-sm font-bold text-gray-900 dark:text-gray-100">
+                        ${parseFloat(request.total_value || 0).toFixed(2)}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                      {new Date(request.created_at).toLocaleDateString()}
+                    </span>
+                    <button
+                      onClick={() => viewRequestDetails(request)}
+                      className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-semibold transition-colors"
+                    >
+                      View Details
+                    </button>
+                  </div>
+                </div>
+              ))}
+              {requests.length === 0 && (
+                <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+                  <div className="flex flex-col items-center">
+                    <span className="text-lg font-medium">
+                      No stock requests found
+                    </span>
+                    <span className="text-sm mt-1">
+                      Try adjusting your filters or create a new request
+                    </span>
+                  </div>
+                </div>
               )}
-            </tbody>
-          </table>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Request Details Modal */}
       {showDetails && selectedRequest && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-surface-container-lowest rounded-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-outline-variant/10">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white dark:bg-gray-900 rounded-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto shadow-xl">
+            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
               <div className="flex justify-between items-start">
                 <div>
-                  <h2 className="text-xl font-bold text-on-surface">
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
                     {selectedRequest.code}
                   </h2>
-                  <p className="text-on-surface-variant">
+                  <p className="text-gray-600 dark:text-gray-400">
                     {selectedRequest.branch?.name} • Created by{" "}
                     {selectedRequest.creator?.name}
                   </p>
                 </div>
                 <button
                   onClick={() => setShowDetails(false)}
-                  className="p-2 hover:bg-surface-container rounded-lg"
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
                 >
-                  <span className="material-symbols-outlined">close</span>
+                  <span className="material-symbols-outlined text-gray-600 dark:text-gray-400">
+                    close
+                  </span>
                 </button>
               </div>
             </div>
@@ -401,36 +457,39 @@ const StockRequestsList = () => {
               {/* Request Info */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
-                  <h3 className="font-semibold text-on-surface mb-3">
+                  <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">
                     Request Information
                   </h3>
                   <div className="space-y-2">
                     <div className="flex justify-between">
-                      <span className="text-sm text-on-surface-variant">
+                      <span className="text-sm text-gray-600 dark:text-gray-400">
                         Status:
                       </span>
                       <span
-                        className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(selectedRequest.status)}`}
+                        className={`inline-flex px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(selectedRequest.status)}`}
                       >
                         {selectedRequest.status}
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-sm text-on-surface-variant">
+                      <span className="text-sm text-gray-600 dark:text-gray-400">
                         Priority:
                       </span>
                       <span
-                        className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(selectedRequest.priority)}`}
+                        className={`inline-flex px-2 py-1 rounded-full text-xs font-semibold ${getPriorityColor(selectedRequest.priority)}`}
                       >
                         {selectedRequest.priority || "normal"}
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-sm text-on-surface-variant">
+                      <span className="text-sm text-gray-600 dark:text-gray-400">
                         Total Value:
                       </span>
-                      <span className="font-medium text-on-surface">
-                        ${(selectedRequest.total_value || 0).toFixed(2)}
+                      <span className="font-medium text-gray-900 dark:text-gray-100">
+                        $
+                        {parseFloat(selectedRequest.total_value || 0).toFixed(
+                          2,
+                        )}
                       </span>
                     </div>
                     {selectedRequest.expected_delivery_date && (
