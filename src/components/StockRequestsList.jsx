@@ -22,6 +22,37 @@ const StockRequestsList = () => {
   const isBranchUser =
     typeof user?.role === "string" && user.role.startsWith("branch_");
 
+  const canViewRequestDetails = (request) => {
+    // Admin and warehouse staff can view all requests
+    if (user?.role === "admin" || user?.role === "warehouse_staff") {
+      return true;
+    }
+
+    // Branch users can only view requests from their own branch
+    if (isBranchUser && request.branch_id === user?.branch_id) {
+      return true;
+    }
+
+    return false;
+  };
+
+  const canApproveRejectRequests = () => {
+    // Only admin and warehouse staff can approve/reject requests
+    return user?.role === "admin" || user?.role === "warehouse_staff";
+  };
+
+  const canManageWarehouseActions = () => {
+    // Only admin and warehouse staff can dispatch requests
+    return user?.role === "admin" || user?.role === "warehouse_staff";
+  };
+
+  const canMarkAsDelivered = (request) => {
+    // Only branch managers can mark as delivered, and only for their own branch
+    return (
+      user?.role === "branch_manager" && request.branch_id === user?.branch_id
+    );
+  };
+
   useEffect(() => {
     fetchRequests();
   }, [filters]);
@@ -323,12 +354,16 @@ const StockRequestsList = () => {
                           </span>
                         </td>
                         <td className="px-4 lg:px-6 py-4 whitespace-nowrap">
-                          <button
-                            onClick={() => viewRequestDetails(request)}
-                            className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-semibold transition-colors"
-                          >
-                            View Details
-                          </button>
+                          {canViewRequestDetails(request) ? (
+                            <button
+                              onClick={() => viewRequestDetails(request)}
+                              className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-semibold transition-colors"
+                            >
+                              View Details
+                            </button>
+                          ) : (
+                            <span className="text-gray-400 text-sm">-</span>
+                          )}
                         </td>
                       </tr>
                     ))
@@ -407,12 +442,16 @@ const StockRequestsList = () => {
                     <span className="text-xs text-gray-500 dark:text-gray-400">
                       {new Date(request.created_at).toLocaleDateString()}
                     </span>
-                    <button
-                      onClick={() => viewRequestDetails(request)}
-                      className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-semibold transition-colors"
-                    >
-                      View Details
-                    </button>
+                    {canViewRequestDetails(request) ? (
+                      <button
+                        onClick={() => viewRequestDetails(request)}
+                        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-semibold transition-colors"
+                      >
+                        View Details
+                      </button>
+                    ) : (
+                      <span className="text-gray-400 text-sm">-</span>
+                    )}
                   </div>
                 </div>
               ))}
@@ -646,43 +685,51 @@ const StockRequestsList = () => {
 
               {/* Actions */}
               <div className="flex justify-end gap-3">
-                {selectedRequest.status === "pending" && (
-                  <>
+                {selectedRequest.status === "pending" &&
+                  canApproveRejectRequests() && (
+                    <>
+                      <button
+                        onClick={() => {
+                          const reason = prompt(
+                            "Please enter rejection reason:",
+                          );
+                          if (reason) handleReject(selectedRequest.id, reason);
+                        }}
+                        className="px-4 py-2 bg-error text-on-error rounded-lg hover:opacity-90"
+                      >
+                        Reject
+                      </button>
+                      <button
+                        onClick={() =>
+                          handleApprove(
+                            selectedRequest.id,
+                            selectedRequest.items,
+                          )
+                        }
+                        className="px-4 py-2 bg-primary text-on-primary rounded-lg hover:opacity-90"
+                      >
+                        Approve
+                      </button>
+                    </>
+                  )}
+                {selectedRequest.status === "approved" &&
+                  canManageWarehouseActions() && (
                     <button
-                      onClick={() => {
-                        const reason = prompt("Please enter rejection reason:");
-                        if (reason) handleReject(selectedRequest.id, reason);
-                      }}
-                      className="px-4 py-2 bg-error text-on-error rounded-lg hover:opacity-90"
+                      onClick={() => handleDispatch(selectedRequest.id)}
+                      className="px-4 py-2 bg-info text-on-info rounded-lg hover:opacity-90"
                     >
-                      Reject
+                      Dispatch
                     </button>
+                  )}
+                {selectedRequest.status === "dispatched" &&
+                  canMarkAsDelivered(selectedRequest) && (
                     <button
-                      onClick={() =>
-                        handleApprove(selectedRequest.id, selectedRequest.items)
-                      }
-                      className="px-4 py-2 bg-primary text-on-primary rounded-lg hover:opacity-90"
+                      onClick={() => handleDeliver(selectedRequest.id)}
+                      className="px-4 py-2 bg-success text-on-success rounded-lg hover:opacity-90"
                     >
-                      Approve
+                      Mark as Delivered
                     </button>
-                  </>
-                )}
-                {selectedRequest.status === "approved" && (
-                  <button
-                    onClick={() => handleDispatch(selectedRequest.id)}
-                    className="px-4 py-2 bg-info text-on-info rounded-lg hover:opacity-90"
-                  >
-                    Dispatch
-                  </button>
-                )}
-                {selectedRequest.status === "dispatched" && (
-                  <button
-                    onClick={() => handleDeliver(selectedRequest.id)}
-                    className="px-4 py-2 bg-success text-on-success rounded-lg hover:opacity-90"
-                  >
-                    Mark as Delivered
-                  </button>
-                )}
+                  )}
               </div>
             </div>
           </div>
