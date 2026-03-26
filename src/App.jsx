@@ -24,6 +24,7 @@ const StockRequestsList = lazy(() => import("./components/StockRequestsList"));
 const StockRequestForm = lazy(() => import("./components/StockRequestForm"));
 const ReportsPage = lazy(() => import("./components/ReportsPage"));
 const SettingsPage = lazy(() => import("./components/SettingsPage"));
+const SupportPage = lazy(() => import("./components/SupportPage"));
 const Login = lazy(() => import("./components/Login"));
 const NotFound = lazy(() => import("./components/NotFound"));
 
@@ -131,7 +132,15 @@ const App = () => {
                             />
                             <Route
                               path="/dashboard"
-                              element={<InventoryDashboard />}
+                              element={
+                                <Suspense
+                                  fallback={
+                                    <LoadingSpinner text="Loading dashboard..." />
+                                  }
+                                >
+                                  <InventoryDashboard />
+                                </Suspense>
+                              }
                             />
                             <Route
                               path="/products"
@@ -210,6 +219,18 @@ const App = () => {
                                   }
                                 >
                                   <SettingsPage />
+                                </Suspense>
+                              }
+                            />
+                            <Route
+                              path="/support"
+                              element={
+                                <Suspense
+                                  fallback={
+                                    <LoadingSpinner text="Loading support..." />
+                                  }
+                                >
+                                  <SupportPage />
                                 </Suspense>
                               }
                             />
