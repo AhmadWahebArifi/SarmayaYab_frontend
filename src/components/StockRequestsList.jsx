@@ -365,6 +365,9 @@ const StockRequestsList = () => {
                       <p className="text-sm text-gray-600 dark:text-gray-400">
                         {request.branch?.name}
                       </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-500">
+                        by {request.creator?.name}
+                      </p>
                     </div>
                     <div className="flex flex-col gap-2 items-end">
                       <span
@@ -439,7 +442,8 @@ const StockRequestsList = () => {
                   </h2>
                   <p className="text-gray-600 dark:text-gray-400">
                     {selectedRequest.branch?.name} • Created by{" "}
-                    {selectedRequest.creator?.name}
+                    {selectedRequest.creator?.name} (
+                    {selectedRequest.creator?.email})
                   </p>
                 </div>
                 <button
