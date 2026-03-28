@@ -1,10 +1,16 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthProvider";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import Loader from "./Loader";
 
 const BranchManagement = () => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [activeView, setActiveView] = useState("grid");
+  const [region, setRegion] = useState("All Global Sites");
 
   // Check if user has permission to access branch management
   useEffect(() => {
@@ -14,8 +20,14 @@ const BranchManagement = () => {
     }
   }, [user, navigate]);
 
-  const [activeView, setActiveView] = useState("grid");
-  const [region, setRegion] = useState("All Global Sites");
+  // Simulate loading branches data
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const stats = useMemo(
     () => [
@@ -56,7 +68,7 @@ const BranchManagement = () => {
         name: "Berlin Hub East",
         location: "Friedrichshain, Berlin, DE",
         status: {
-          label: "Active",
+          label: t("common.active"),
           className: "bg-tertiary-fixed text-on-tertiary-fixed-variant",
         },
         stockLevel: "12,450",
@@ -71,7 +83,7 @@ const BranchManagement = () => {
         name: "London Logistics",
         location: "Canary Wharf, London, UK",
         status: {
-          label: "Active",
+          label: t("common.active"),
           className: "bg-tertiary-fixed text-on-tertiary-fixed-variant",
         },
         stockLevel: "8,200",
@@ -86,7 +98,7 @@ const BranchManagement = () => {
         name: "Tokyo Distribution",
         location: "Shinjuku, Tokyo, JP",
         status: {
-          label: "Critical Stock",
+          label: t("branches.status.critical"),
           className: "bg-error-container text-on-error-container",
         },
         stockLevel: "2,100",
@@ -102,7 +114,7 @@ const BranchManagement = () => {
         name: "New York Hub",
         location: "Manhattan, NY, USA",
         status: {
-          label: "Active",
+          label: t("common.active"),
           className: "bg-tertiary-fixed text-on-tertiary-fixed-variant",
         },
         stockLevel: "15,900",
@@ -115,6 +127,15 @@ const BranchManagement = () => {
     ],
     [],
   );
+
+  if (loading) {
+    return (
+      <Loader
+        message={t("loader.loadingBranchManagement")}
+        showBackground={false}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-surface">
