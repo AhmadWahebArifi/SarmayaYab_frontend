@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useLoader } from "../contexts/LoaderProvider";
+import { useTranslation } from "react-i18next";
 import Loader from "./Loader";
 import api from "../services/api";
 
 const InventoryDashboard = () => {
   const { showLoader, hideLoader } = useLoader();
+  const { t } = useTranslation();
   const [dashboardData, setDashboardData] = useState({
     summary: {},
     recentRequests: [],
@@ -20,7 +22,7 @@ const InventoryDashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
-      showLoader("Loading dashboard analytics...", true);
+      showLoader(t("loader.loadingDashboard"), true);
 
       const response = await api.get("/analytics/dashboard");
       setDashboardData(response.data);
@@ -65,7 +67,9 @@ const InventoryDashboard = () => {
   };
 
   if (loading) {
-    return <Loader message="Loading Dashboard..." showBackground={false} />;
+    return (
+      <Loader message={t("loader.loadingDashboard")} showBackground={false} />
+    );
   }
 
   return (
@@ -74,10 +78,10 @@ const InventoryDashboard = () => {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-on-surface">
-            Inventory Dashboard
+            {t("dashboard.title")}
           </h1>
-          <p className="text-on-surface-variant">
-            Real-time inventory insights and analytics
+          <p className="text-on-surface-variant mt-2">
+            {t("dashboard.subtitle")}
           </p>
         </div>
         <button
@@ -85,7 +89,7 @@ const InventoryDashboard = () => {
           className="px-4 py-2 bg-primary text-on-primary rounded-lg hover:opacity-90 flex items-center gap-2"
         >
           <span className="material-symbols-outlined">refresh</span>
-          Refresh
+          {t("common.refresh")}
         </button>
       </div>
 
@@ -94,7 +98,7 @@ const InventoryDashboard = () => {
         <div className="p-6 bg-surface-container-lowest rounded-xl border border-outline-variant/20">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium text-on-surface-variant">
-              Total Requests
+              {t("dashboard.totalRequests")}
             </span>
             <span className="material-symbols-outlined text-primary">
               request_quote
@@ -103,13 +107,15 @@ const InventoryDashboard = () => {
           <p className="text-2xl font-bold text-on-surface">
             {dashboardData.summary.total_requests || 0}
           </p>
-          <p className="text-xs text-on-surface-variant mt-1">All time</p>
+          <p className="text-xs text-on-surface-variant mt-1">
+            {t("dashboard.allTime")}
+          </p>
         </div>
 
         <div className="p-6 bg-surface-container-lowest rounded-xl border border-outline-variant/20">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium text-on-surface-variant">
-              Pending
+              {t("dashboard.pending")}
             </span>
             <span className="material-symbols-outlined text-warning">
               hourglass_empty
@@ -119,14 +125,14 @@ const InventoryDashboard = () => {
             {dashboardData.summary.pending_requests || 0}
           </p>
           <p className="text-xs text-on-surface-variant mt-1">
-            Awaiting approval
+            {t("dashboard.awaitingApproval")}
           </p>
         </div>
 
         <div className="p-6 bg-surface-container-lowest rounded-xl border border-outline-variant/20">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium text-on-surface-variant">
-              Approved
+              {t("dashboard.approved")}
             </span>
             <span className="material-symbols-outlined text-primary">
               check_circle
@@ -136,14 +142,14 @@ const InventoryDashboard = () => {
             {dashboardData.summary.approved_requests || 0}
           </p>
           <p className="text-xs text-on-surface-variant mt-1">
-            Ready to dispatch
+            {t("dashboard.readyToDispatch")}
           </p>
         </div>
 
         <div className="p-6 bg-surface-container-lowest rounded-xl border border-outline-variant/20">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium text-on-surface-variant">
-              Urgent
+              {t("dashboard.urgent")}
             </span>
             <span className="material-symbols-outlined text-error">
               priority_high
@@ -152,13 +158,15 @@ const InventoryDashboard = () => {
           <p className="text-2xl font-bold text-error">
             {dashboardData.summary.urgent_requests || 0}
           </p>
-          <p className="text-xs text-on-surface-variant mt-1">High priority</p>
+          <p className="text-xs text-on-surface-variant mt-1">
+            {t("dashboard.highPriority")}
+          </p>
         </div>
 
         <div className="p-6 bg-surface-container-lowest rounded-xl border border-outline-variant/20">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium text-on-surface-variant">
-              Total Value
+              {t("dashboard.totalValue")}
             </span>
             <span className="material-symbols-outlined text-primary">
               payments
@@ -167,7 +175,9 @@ const InventoryDashboard = () => {
           <p className="text-2xl font-bold text-primary">
             ${parseFloat(dashboardData.summary.total_value || 0).toFixed(2)}
           </p>
-          <p className="text-xs text-on-surface-variant mt-1">All requests</p>
+          <p className="text-xs text-on-surface-variant mt-1">
+            {t("dashboard.allRequests")}
+          </p>
         </div>
       </div>
 
@@ -177,10 +187,12 @@ const InventoryDashboard = () => {
           <div className="p-6 border-b border-outline-variant/10">
             <div className="flex justify-between items-center">
               <h2 className="text-lg font-semibold text-on-surface">
-                Recent Requests
+                {t("dashboard.recentRequests")}
               </h2>
               <span className="text-sm text-on-surface-variant">
-                Last {dashboardData.recentRequests?.length || 0} requests
+                {t("dashboard.lastRequests", {
+                  count: dashboardData.recentRequests?.length || 0,
+                })}
               </span>
             </div>
           </div>
@@ -233,7 +245,7 @@ const InventoryDashboard = () => {
                 ))
               ) : (
                 <p className="text-center text-on-surface-variant py-8">
-                  No recent requests
+                  {t("dashboard.noRecentRequests")}
                 </p>
               )}
             </div>
@@ -248,10 +260,12 @@ const InventoryDashboard = () => {
                 <span className="material-symbols-outlined text-warning">
                   warning
                 </span>
-                Low Stock Alerts
+                {t("dashboard.lowStockAlerts")}
               </h2>
               <span className="px-2 py-1 bg-warning text-on-warning rounded-full text-xs font-medium">
-                {dashboardData.lowStockAlerts?.length || 0} items
+                {t("dashboard.criticalItems", {
+                  count: dashboardData.lowStockAlerts?.length || 0,
+                })}
               </span>
             </div>
           </div>
@@ -297,7 +311,7 @@ const InventoryDashboard = () => {
                     check_circle
                   </span>
                   <p className="text-on-surface-variant text-sm">
-                    All stock levels are healthy
+                    {t("dashboard.noLowStockAlerts")}
                   </p>
                 </div>
               )}
@@ -312,7 +326,7 @@ const InventoryDashboard = () => {
         <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/20">
           <div className="p-6 border-b border-outline-variant/10">
             <h2 className="text-lg font-semibold text-on-surface">
-              Top Products (30 days)
+              {t("dashboard.topProducts")}
             </h2>
           </div>
           <div className="p-6">
@@ -359,20 +373,22 @@ const InventoryDashboard = () => {
         <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/20">
           <div className="p-6 border-b border-outline-variant/10">
             <h2 className="text-lg font-semibold text-on-surface">
-              Request Summary
+              {t("dashboard.requestSummary")}
             </h2>
           </div>
           <div className="p-6">
             <div className="space-y-4">
               <div className="flex justify-between items-center">
-                <span className="text-sm text-on-surface-variant">Pending</span>
+                <span className="text-sm text-on-surface-variant">
+                  {t("dashboard.pending")}
+                </span>
                 <span className="font-medium text-warning">
                   {dashboardData.summary.pending_requests || 0}
                 </span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm text-on-surface-variant">
-                  Approved
+                  {t("dashboard.approved")}
                 </span>
                 <span className="font-medium text-primary">
                   {dashboardData.summary.approved_requests || 0}
@@ -380,7 +396,7 @@ const InventoryDashboard = () => {
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm text-on-surface-variant">
-                  Dispatched
+                  {t("stockRequests.statuses.dispatched")}
                 </span>
                 <span className="font-medium text-info">
                   {dashboardData.summary.dispatched_requests || 0}
@@ -388,7 +404,7 @@ const InventoryDashboard = () => {
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm text-on-surface-variant">
-                  Delivered
+                  {t("stockRequests.statuses.delivered")}
                 </span>
                 <span className="font-medium text-success">
                   {dashboardData.summary.delivered_requests || 0}
