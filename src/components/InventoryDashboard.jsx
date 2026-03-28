@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useLoader } from "../contexts/LoaderProvider";
 import { useTranslation } from "react-i18next";
 import Loader from "./Loader";
 import api from "../services/api";
 
 const InventoryDashboard = () => {
-  const { showLoader, hideLoader } = useLoader();
   const { t } = useTranslation();
+  const [loading, setLoading] = useState(true);
   const [dashboardData, setDashboardData] = useState({
     summary: {},
     recentRequests: [],
@@ -14,7 +13,6 @@ const InventoryDashboard = () => {
     topProducts: [],
     requestTrends: [],
   });
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchDashboardData();
@@ -22,7 +20,7 @@ const InventoryDashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
-      showLoader(t("loader.loadingDashboard"), true);
+      setLoading(true);
 
       const response = await api.get("/analytics/dashboard");
       setDashboardData(response.data);
@@ -30,9 +28,12 @@ const InventoryDashboard = () => {
       console.error("Error fetching dashboard data:", error);
     } finally {
       setLoading(false);
-      hideLoader();
     }
   };
+
+  if (loading) {
+    return <Loader message="Loading Dashboard..." showBackground={false} />;
+  }
 
   const getPriorityColor = (priority) => {
     switch (priority) {
@@ -65,12 +66,6 @@ const InventoryDashboard = () => {
         return "text-on-surface bg-surface-container";
     }
   };
-
-  if (loading) {
-    return (
-      <Loader message={t("loader.loadingDashboard")} showBackground={false} />
-    );
-  }
 
   return (
     <div className="p-6 space-y-6">
