@@ -21,7 +21,7 @@ const LanguageSwitcher = () => {
     setIsChanging(true);
 
     // Show loading state
-    showLoader(i18n.t("loader.changingLanguage"), true);
+    showLoader(i18n.t("loader.changingLanguage"), false);
 
     try {
       // Add a small delay for smooth transition
