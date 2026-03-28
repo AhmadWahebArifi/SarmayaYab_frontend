@@ -311,7 +311,8 @@
     "rejectingRequest": "در حال رد درخواست...",
     "dispatchingRequest": "در حال ارسال درخواست...",
     "markingAsDelivered": "در حال علامت‌گذاری به عنوان تحویل داده شده...",
-    "loadingSmartSuggestions": "در حال بارگذاری پیشنهادهای هوشمند..."
+    "loadingSmartSuggestions": "در حال بارگذاری پیشنهادهای هوشمند...",
+    "changingLanguage": "در حال تغییر زبان..."
   },
   "localization": {
     "title": "نمایش محلی‌سازی",
