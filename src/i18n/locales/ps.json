@@ -311,7 +311,8 @@
     "rejectingRequest": "غوښتنه رد کیږي...",
     "dispatchingRequest": "غوښتنه لېږل کیږي...",
     "markingAsDelivered": "د رسول شوی په توګه نښانول کیږي...",
-    "loadingSmartSuggestions": "هوشمندې وړاندیزونه په لوړه کېږي..."
+    "loadingSmartSuggestions": "هوشمندې وړاندیزونه په لوړه کېږي...",
+    "changingLanguage": "ژبه بدلول کیږي..."
   },
   "localization": {
     "title": "محلي کولو ډیمو",
