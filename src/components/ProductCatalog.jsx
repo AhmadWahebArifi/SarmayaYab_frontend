@@ -135,11 +135,7 @@ const ProductCatalog = () => {
   );
 
   if (loading) {
-    return (
-      <div className="p-6">
-        <div className="text-center">Loading products...</div>
-      </div>
-    );
+    return <Loader message="Loading Products..." showBackground={false} />;
   }
 
   if (error) {
