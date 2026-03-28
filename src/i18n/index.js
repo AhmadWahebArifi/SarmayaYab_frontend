@@ -1,11 +1,12 @@
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
-import HttpApi from 'i18next-http-backend';
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
+import HttpApi from "i18next-http-backend";
 
 // Import translation files
-import enTranslations from './locales/en.json';
-import arTranslations from './locales/ar.json';
+import enTranslations from "./locales/en.json";
+import faTranslations from "./locales/fa.json";
+import psTranslations from "./locales/ps.json";
 
 i18n
   // Detect user language
@@ -16,14 +17,14 @@ i18n
   .use(HttpApi)
   .init({
     // Fallback language
-    fallbackLng: 'en',
-    debug: process.env.NODE_ENV === 'development',
-    
+    fallbackLng: "en",
+    debug: process.env.NODE_ENV === "development",
+
     // Detection options
     detection: {
-      order: ['localStorage', 'navigator', 'htmlTag'],
-      caches: ['localStorage'],
-      lookupLocalStorage: 'i18nextLng',
+      order: ["localStorage", "navigator", "htmlTag"],
+      caches: ["localStorage"],
+      lookupLocalStorage: "i18nextLng",
     },
 
     // Interpolation
@@ -33,7 +34,7 @@ i18n
 
     // Backend configuration
     backend: {
-      loadPath: '/locales/{{lng}}/{{ns}}.json',
+      loadPath: "/locales/{{lng}}/{{ns}}.json",
     },
 
     // Resources (fallback for development)
@@ -41,20 +42,23 @@ i18n
       en: {
         translation: enTranslations,
       },
-      ar: {
-        translation: arTranslations,
+      fa: {
+        translation: faTranslations,
+      },
+      ps: {
+        translation: psTranslations,
       },
     },
 
     // Namespaces
-    ns: ['translation'],
-    defaultNS: 'translation',
+    ns: ["translation"],
+    defaultNS: "translation",
 
     // React options
     react: {
       useSuspense: false,
-      bindI18n: 'languageChanged',
-      bindI18nStore: 'added removed',
+      bindI18n: "languageChanged",
+      bindI18nStore: "added removed",
     },
   });
 
