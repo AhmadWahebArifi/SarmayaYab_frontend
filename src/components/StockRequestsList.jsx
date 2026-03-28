@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLoader } from "../contexts/LoaderProvider";
 import { useAuth } from "../contexts/AuthProvider";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 import Loader from "./Loader";
@@ -8,6 +9,7 @@ import Loader from "./Loader";
 const StockRequestsList = () => {
   const { showLoader, hideLoader } = useLoader();
   const { user } = useAuth();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -190,7 +192,10 @@ const StockRequestsList = () => {
 
   if (loading) {
     return (
-      <Loader message="Loading Stock Requests..." showBackground={false} />
+      <Loader
+        message={t("loader.loadingStockRequests")}
+        showBackground={false}
+      />
     );
   }
 
@@ -230,12 +235,22 @@ const StockRequestsList = () => {
               }
               className="w-full p-2 border border-outline-variant rounded-lg bg-surface-container text-on-surface"
             >
-              <option value="">All Status</option>
-              <option value="pending">Pending</option>
-              <option value="approved">Approved</option>
-              <option value="dispatched">Dispatched</option>
-              <option value="delivered">Delivered</option>
-              <option value="rejected">Rejected</option>
+              <option value="">{t("stockRequests.filters.allStatus")}</option>
+              <option value="pending">
+                {t("stockRequests.statuses.pending")}
+              </option>
+              <option value="approved">
+                {t("stockRequests.statuses.approved")}
+              </option>
+              <option value="dispatched">
+                {t("stockRequests.statuses.dispatched")}
+              </option>
+              <option value="delivered">
+                {t("stockRequests.statuses.delivered")}
+              </option>
+              <option value="rejected">
+                {t("stockRequests.statuses.rejected")}
+              </option>
             </select>
           </div>
 
@@ -624,7 +639,7 @@ const StockRequestsList = () => {
                         {item.approved_qty && (
                           <div className="text-center">
                             <p className="text-xs text-on-surface-variant">
-                              Approved
+                              {t("stockRequests.approved")}
                             </p>
                             <p className="font-medium text-primary">
                               {item.approved_qty}
@@ -634,7 +649,7 @@ const StockRequestsList = () => {
                         {item.dispatched_qty && (
                           <div className="text-center">
                             <p className="text-xs text-on-surface-variant">
-                              Dispatched
+                              {t("stockRequests.statuses.dispatched")}
                             </p>
                             <p className="font-medium text-info">
                               {item.dispatched_qty}
@@ -730,7 +745,7 @@ const StockRequestsList = () => {
                       onClick={() => handleDeliver(selectedRequest.id)}
                       className="px-4 py-2 bg-success text-on-success rounded-lg hover:opacity-90"
                     >
-                      Mark as Delivered
+                      {t("stockRequests.markAsDelivered")}
                     </button>
                   )}
               </div>
