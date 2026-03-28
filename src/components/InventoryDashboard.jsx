@@ -22,6 +22,9 @@ const InventoryDashboard = () => {
     try {
       setLoading(true);
 
+      // Simulate 3-second loading time
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+
       const response = await api.get("/analytics/dashboard");
       setDashboardData(response.data);
     } catch (error) {
