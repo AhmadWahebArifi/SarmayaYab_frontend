@@ -8,7 +8,7 @@ const SupportPage = () => {
   const [tickets, setTickets] = useState([]);
 
   useEffect(() => {
-    // Simulate loading support data
+    // Simulate loading support data with 3-second delay
     const timer = setTimeout(() => {
       setTickets([
         {
@@ -34,7 +34,7 @@ const SupportPage = () => {
         },
       ]);
       setLoading(false);
-    }, 900);
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, []);
