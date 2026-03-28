@@ -61,6 +61,9 @@ const StockRequestsList = () => {
     try {
       setLoading(true);
 
+      // Simulate 3-second loading time
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+
       const queryParams = new URLSearchParams();
       if (filters.status) queryParams.append("status", filters.status);
       if (filters.priority) queryParams.append("priority", filters.priority);
