@@ -1,13 +1,17 @@
-import React from 'react';
+import React from "react";
 
-const Loader = ({ 
-  message = "Initializing System...", 
+const Loader = ({
+  message = "Initializing System...",
   showBackground = true,
   title = "SarmayaYab",
-  subtitle = "Branch Inventory Management System"
+  subtitle = "Branch Inventory Management System",
 }) => {
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-surface/60 backdrop-blur-sm">
+    <div
+      className={`fixed inset-0 z-50 flex flex-col items-center justify-center ${
+        showBackground ? "bg-surface/60 backdrop-blur-sm" : "bg-transparent"
+      }`}
+    >
       {/* Background Context (Mocked Screen Underlay) - only show if enabled */}
       {showBackground && (
         <div className="fixed inset-0 z-0 flex items-center justify-center opacity-40 grayscale pointer-events-none">
@@ -31,8 +35,8 @@ const Loader = ({
           <div className="absolute w-24 h-24 border-t-2 border-primary rounded-full animate-spin"></div>
           {/* Logo Inner Mark */}
           <div className="bg-primary-container w-16 h-16 rounded-lg flex items-center justify-center shadow-lg">
-            <span 
-              className="material-symbols-outlined text-on-primary text-3xl" 
+            <span
+              className="material-symbols-outlined text-on-primary text-3xl"
               style={{ fontVariationSettings: "'FILL' 1, 'wght' 400" }}
             >
               inventory_2
@@ -70,16 +74,26 @@ const Loader = ({
       {/* Custom styles for animations */}
       <style jsx>{`
         @keyframes loading {
-          0% { transform: translateX(-100%); }
-          50% { transform: translateX(0%); }
-          100% { transform: translateX(100%); }
+          0% {
+            transform: translateX(-100%);
+          }
+          50% {
+            transform: translateX(0%);
+          }
+          100% {
+            transform: translateX(100%);
+          }
         }
         .animate-spin {
           animation: spin 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
         @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
         }
       `}</style>
     </div>
