@@ -196,11 +196,74 @@
     "region": "سیمه",
     "city": "ښار",
     "address": "پته",
-    "status": "وضعیت",
+    "statusLabel": "وضعیت",
     "actions": "چارې",
     "edit": "سمول",
     "delete": "ړنګول",
     "noBranches": "څانګه ونه موندل شوه",
+    "stats": {
+      "totalActiveBranches": "ټولې فعالې څانګې",
+      "averageBranchStock": "د څانګو اوسط موجودي",
+      "criticalFulfillment": "بیړنۍ پوره کول",
+      "skusPerSite": "SKU/سایټ",
+      "actionRequired": "اقدام ته اړتیا"
+    },
+    "status": {
+      "active": "فعال",
+      "inactive": "غیرفعال",
+      "critical": "جدي موجودي"
+    },
+    "page": {
+      "subtitle": "نړیوال لوژستیک او محلي د موجودي کنټرول",
+      "searchPlaceholder": "څانګې ولټوئ...",
+      "addNewBranch": "نوې څانګه اضافه کړئ",
+      "filterByRegion": "د سیمې له مخې فلټر:",
+      "views": {
+        "grid": "ګریډ",
+        "map": "د نقشې لید"
+      },
+      "regions": {
+        "all": "ټولې نړیوالې ساحې",
+        "na": "شمالي امریکا",
+        "emea": "اروپا/منځنی ختیځ/افریقا",
+        "apac": "اسیا-پسیفیک"
+      },
+      "card": {
+        "stockLevel": "د موجودي کچه",
+        "requests": "غوښتنې",
+        "manage": "مدیریت"
+      },
+      "geospatialDistribution": "جغرافیایي وېش",
+      "distribution": {
+        "na": "شمالي امریکا",
+        "naSites": "۸ سایټونه",
+        "eu": "اروپا",
+        "euSites": "۱۲ سایټونه",
+        "asia": "اسیا",
+        "asiaSites": "۴ سایټونه"
+      },
+      "recentActivity": {
+        "title": "د څانګو وروستي فعالیتونه",
+        "items": {
+          "authorized": {
+            "title": "نوې څانګه تایید شوه",
+            "description": "د سنګاپور مرکزي هب د مدیر لخوا شبکې ته اضافه شو.",
+            "time": "۲ ساعته مخکې"
+          },
+          "tokyoCritical": {
+            "title": "خبرتیا: د توکیو جدي موجودي",
+            "description": "د ۱۲ SKU لپاره موجودي د ۱۵٪ تر کچې ښکته شوه.",
+            "time": "۵ ساعته مخکې"
+          },
+          "berlinAudit": {
+            "title": "د برلین تفتیش بشپړ شو",
+            "description": "مدیر لوکاس مایر د Q3 موجودي غوښتنې تایید کړې.",
+            "time": "پرون"
+          }
+        }
+      },
+      "viewFullAuditLog": "د تفتیش بشپړ لاګ وګورئ"
+    },
     "form": {
       "addBranch": "څانګه اضافه کړئ",
       "editBranch": "څانګه سمول",
