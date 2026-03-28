@@ -1,0 +1,117 @@
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDarkMode } from '../contexts/DarkModeProvider';
+
+const LanguageToggle = () => {
+  const { i18n } = useTranslation();
+  const { darkMode } = useDarkMode();
+
+  const languages = [
+    { code: 'en', name: 'English', nativeName: 'English', flag: '🇺🇸', dir: 'ltr' },
+    { code: 'fa', name: 'Dari', nativeName: 'دری', flag: '🇦🇫', dir: 'rtl' },
+    { code: 'ps', name: 'Pashto', nativeName: 'پښتو', flag: '🇦🇫', dir: 'rtl' },
+  ];
+
+  const handleLanguageChange = (languageCode) => {
+    i18n.changeLanguage(languageCode);
+    // Update document direction for RTL support
+    const selectedLanguage = languages.find(lang => lang.code === languageCode);
+    document.documentElement.dir = selectedLanguage?.dir || 'ltr';
+    document.documentElement.lang = languageCode;
+    
+    // Save to localStorage for persistence
+    localStorage.setItem('selectedLanguage', languageCode);
+  };
+
+  const currentLanguage = languages.find(lang => lang.code === i18n.language) || languages[0];
+
+  return (
+    <div className="space-y-4">
+      <div>
+        <label className="block text-sm font-medium text-gray-900 dark:text-white mb-3">
+          {i18n.t('settings.selectLanguage')}
+        </label>
+        <div className="grid grid-cols-1 gap-3">
+          {languages.map((language) => (
+            <button
+              key={language.code}
+              onClick={() => handleLanguageChange(language.code)}
+              className={`p-4 rounded-lg border-2 transition-all duration-200 text-left ${
+                i18n.language === language.code
+                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-400'
+                  : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <span className="text-2xl">{language.flag}</span>
+                  <div>
+                    <div className={`font-medium ${
+                      darkMode ? 'text-white' : 'text-gray-900'
+                    }`}>
+                      {language.nativeName}
+                    </div>
+                    <div className={`text-sm ${
+                      darkMode ? 'text-gray-400' : 'text-gray-500'
+                    }`}>
+                      {language.name}
+                    </div>
+                  </div>
+                </div>
+                {i18n.language === language.code && (
+                  <div className="flex items-center">
+                    <svg
+                      className={`w-5 h-5 ${
+                        darkMode ? 'text-blue-400' : 'text-blue-600'
+                      }`}
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                )}
+              </div>
+              <div className={`text-xs mt-2 ${
+                darkMode ? 'text-gray-400' : 'text-gray-500'
+              }`}>
+                {language.dir === 'rtl' ? 'RTL' : 'LTR'}
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+      
+      <div className={`p-3 rounded-lg ${
+        darkMode ? 'bg-gray-700' : 'bg-gray-100'
+      }`}>
+        <div className="flex items-center space-x-2">
+          <svg
+            className={`w-4 h-4 ${
+              darkMode ? 'text-gray-400' : 'text-gray-500'
+            }`}
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fillRule="evenodd"
+              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+              clipRule="evenodd"
+            />
+          </svg>
+          <p className={`text-sm ${
+            darkMode ? 'text-gray-300' : 'text-gray-600'
+          }`}>
+            {i18n.t('settings.currentLanguage')}: {currentLanguage.nativeName}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default LanguageToggle;
