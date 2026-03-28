@@ -253,7 +253,11 @@
     "automaticallySaveWork": "Automatically save your work",
     "saveSettings": "Save Settings",
     "saving": "Saving...",
-    "settingsSaved": "Settings saved successfully!"
+    "settingsSaved": "Settings saved successfully!",
+    "selectLanguage": "Select Language",
+    "english": "English",
+    "dari": "دری (Dari)",
+    "pashto": "پښتو (Pashto)"
   },
   "support": {
     "title": "Support Center",
