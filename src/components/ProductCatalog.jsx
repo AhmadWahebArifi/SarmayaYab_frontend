@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDarkMode } from "../contexts/DarkModeProvider";
 import { useAuth } from "../contexts/AuthProvider";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 import Loader from "./Loader";
@@ -17,6 +18,7 @@ import {
 const ProductCatalog = () => {
   const { darkMode } = useDarkMode();
   const { user } = useAuth();
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   // Check if user has permission to access product catalog
@@ -80,7 +82,7 @@ const ProductCatalog = () => {
       });
       fetchProducts();
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to add product");
+      alert(err.response?.data?.message || t("products.errors.addFailed"));
     }
   };
 
@@ -100,17 +102,17 @@ const ProductCatalog = () => {
       });
       fetchProducts();
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to update product");
+      alert(err.response?.data?.message || t("products.errors.updateFailed"));
     }
   };
 
   const handleDeleteProduct = async (id) => {
-    if (!confirm("Are you sure you want to delete this product?")) return;
+    if (!confirm(t("products.errors.confirmDelete"))) return;
     try {
       await api.delete(`/products/${id}`);
       fetchProducts();
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to delete product");
+      alert(err.response?.data?.message || t("products.errors.deleteFailed"));
     }
   };
 
@@ -135,7 +137,12 @@ const ProductCatalog = () => {
   );
 
   if (loading) {
-    return <Loader message="Loading Products..." showBackground={false} />;
+    return (
+      <Loader
+        message={t("loader.loadingProductCatalog")}
+        showBackground={false}
+      />
+    );
   }
 
   if (error) {
@@ -150,10 +157,10 @@ const ProductCatalog = () => {
     <div className="p-6">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-          Product Catalog
+          {t("products.title")}
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
-          Manage your inventory products and pricing
+          {t("products.subtitle")}
         </p>
       </div>
 
@@ -164,7 +171,7 @@ const ProductCatalog = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
-                placeholder="Search products..."
+                placeholder={t("products.searchProducts")}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
@@ -172,14 +179,14 @@ const ProductCatalog = () => {
             </div>
             <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
               <FilterList className="w-5 h-5" />
-              Filters
+              {t("common.filter")}
             </button>
             <button
               onClick={() => setShowAddModal(true)}
               className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90"
             >
               <Add className="w-5 h-5" />
-              Add Product
+              {t("products.addProduct")}
             </button>
           </div>
         </div>
@@ -189,28 +196,28 @@ const ProductCatalog = () => {
             <thead className="bg-gray-50 dark:bg-gray-700">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Product
+                  {t("products.name")}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  SKU
+                  {t("products.sku")}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Category
+                  {t("products.category")}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Supplier
+                  {t("products.supplier")}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Purchase Price
+                  {t("products.purchasePrice")}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Selling Price
+                  {t("products.sellingPrice")}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Status
+                  {t("common.status")}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Actions
+                  {t("products.actions")}
                 </th>
               </tr>
             </thead>
@@ -258,7 +265,9 @@ const ProductCatalog = () => {
                           : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
                       }`}
                     >
-                      {product.active ? "Active" : "Inactive"}
+                      {product.active
+                        ? t("common.active")
+                        : t("common.inactive")}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -287,7 +296,9 @@ const ProductCatalog = () => {
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                {editingProduct ? "Edit Product" : "Add New Product"}
+                {editingProduct
+                  ? t("products.form.editProduct")
+                  : t("products.form.addProduct")}
               </h2>
               <button
                 onClick={() => {
@@ -313,7 +324,7 @@ const ProductCatalog = () => {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Product Name
+                  {t("products.form.name")}
                 </label>
                 <input
                   type="text"
@@ -327,7 +338,7 @@ const ProductCatalog = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  SKU
+                  {t("products.form.sku")}
                 </label>
                 <input
                   type="text"
@@ -341,7 +352,7 @@ const ProductCatalog = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Category
+                  {t("products.form.category")}
                 </label>
                 <select
                   value={formData.category}
@@ -350,7 +361,7 @@ const ProductCatalog = () => {
                   }
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 >
-                  <option value="">Select category</option>
+                  <option value="">{t("products.form.category")}</option>
                   <option value="Electronics">Electronics</option>
                   <option value="Accessories">Accessories</option>
                   <option value="Furniture">Furniture</option>
@@ -360,7 +371,7 @@ const ProductCatalog = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Supplier
+                  {t("products.form.supplier")}
                 </label>
                 <input
                   type="text"
@@ -375,7 +386,7 @@ const ProductCatalog = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Purchase Price
+                    {t("products.form.purchasePrice")}
                   </label>
                   <input
                     type="number"
@@ -393,7 +404,7 @@ const ProductCatalog = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Selling Price
+                    {t("products.form.sellingPrice")}
                   </label>
                   <input
                     type="number"
@@ -412,7 +423,7 @@ const ProductCatalog = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Reorder Point
+                  {t("products.form.reorderPoint")}
                 </label>
                 <input
                   type="number"
@@ -437,7 +448,7 @@ const ProductCatalog = () => {
                   className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary"
                 />
                 <label className="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                  Active
+                  {t("common.active")}
                 </label>
               </div>
             </div>
@@ -460,7 +471,7 @@ const ProductCatalog = () => {
                 }}
                 className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
               >
-                Cancel
+                {t("products.form.cancel")}
               </button>
               <button
                 onClick={
@@ -469,7 +480,7 @@ const ProductCatalog = () => {
                 className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90"
               >
                 <Save className="w-5 h-5" />
-                {editingProduct ? "Update" : "Add"} Product
+                {editingProduct ? t("common.update") : t("products.addProduct")}
               </button>
             </div>
           </div>
