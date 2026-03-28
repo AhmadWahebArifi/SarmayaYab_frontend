@@ -35,7 +35,9 @@ const InventoryDashboard = () => {
   };
 
   if (loading) {
-    return <Loader message="Loading Dashboard..." showBackground={false} />;
+    return (
+      <Loader message={t("loader.loadingDashboard")} showBackground={false} />
+    );
   }
 
   const getPriorityColor = (priority) => {
