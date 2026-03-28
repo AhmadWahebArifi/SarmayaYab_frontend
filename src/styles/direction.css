@@ -5,6 +5,25 @@
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Main content positioning based on direction */
+[dir="ltr"] .main-content {
+  margin-left: 16rem; /* 64px = w-64 */
+}
+
+[dir="rtl"] .main-content {
+  margin-right: 16rem; /* 64px = w-64 */
+  margin-left: 0;
+}
+
+/* Mobile overrides - no margin on mobile */
+@media (max-width: 1023px) {
+  [dir="ltr"] .main-content,
+  [dir="rtl"] .main-content {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
 /* RTL-specific adjustments */
 [dir="rtl"] {
   direction: rtl;
@@ -13,6 +32,31 @@
 [dir="rtl"] .sidebar {
   right: 0;
   left: auto;
+  border-right: none;
+  border-left: 1px solid rgb(229 231 235);
+}
+
+[dir="dark"][dir="rtl"] .sidebar {
+  border-left-color: rgb(55 65 81);
+}
+
+/* RTL sidebar mobile animations */
+[dir="rtl"] .sidebar {
+  transform: translateX(0);
+}
+
+[dir="rtl"] .sidebar:not(.translate-x-0) {
+  transform: translateX(100%);
+}
+
+@media (max-width: 1023px) {
+  [dir="rtl"] .sidebar {
+    transform: translateX(100%);
+  }
+
+  [dir="rtl"] .sidebar.translate-x-0 {
+    transform: translateX(0);
+  }
 }
 
 [dir="rtl"] .sidebar-content {
@@ -164,6 +208,133 @@
   text-align: right;
 }
 
+/* Mobile menu toggle positioning */
+[dir="ltr"] .mobile-menu-toggle {
+  order: -1;
+  margin-right: auto;
+}
+
+[dir="rtl"] .mobile-menu-toggle {
+  order: -1;
+  margin-left: auto;
+}
+
+/* Page content RTL adjustments */
+[dir="rtl"] .p-6 {
+  text-align: right;
+}
+
+[dir="rtl"] .page-header {
+  text-align: right;
+}
+
+[dir="rtl"] .card-header {
+  text-align: right;
+}
+
+[dir="rtl"] .grid-cols-1 > div:first-child {
+  margin-right: 0;
+}
+
+[dir="rtl"] .grid-cols-2 > div:first-child {
+  margin-right: 0;
+}
+
+[dir="rtl"] .grid-cols-3 > div:first-child {
+  margin-right: 0;
+}
+
+[dir="rtl"] .grid-cols-4 > div:first-child {
+  margin-right: 0;
+}
+
+/* Dashboard specific RTL adjustments */
+[dir="rtl"] .summary-card {
+  text-align: right;
+}
+
+[dir="rtl"] .summary-card .text-2xl {
+  text-align: right;
+}
+
+[dir="rtl"] .summary-card .text-sm {
+  text-align: right;
+}
+
+[dir="rtl"] .request-item {
+  text-align: right;
+}
+
+[dir="rtl"] .alert-item {
+  text-align: right;
+}
+
+[dir="rtl"] .product-item {
+  text-align: right;
+}
+
+/* Table RTL adjustments */
+[dir="rtl"] .table {
+  direction: rtl;
+}
+
+[dir="rtl"] .table th {
+  text-align: right;
+}
+
+[dir="rtl"] .table td {
+  text-align: right;
+}
+
+[dir="rtl"] .table td:last-child,
+[dir="rtl"] .table th:last-child {
+  text-align: left;
+}
+
+/* Form RTL adjustments */
+[dir="rtl"] .form-group {
+  text-align: right;
+}
+
+[dir="rtl"] .form-label {
+  text-align: right;
+  display: block;
+}
+
+[dir="rtl"] .form-input {
+  text-align: right;
+  direction: rtl;
+}
+
+[dir="rtl"] .form-select {
+  text-align: right;
+  direction: rtl;
+}
+
+[dir="rtl"] .form-textarea {
+  text-align: right;
+  direction: rtl;
+}
+
+/* Button RTL adjustments */
+[dir="rtl"] .btn {
+  text-align: center;
+}
+
+[dir="rtl"] .btn-group {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .btn-group .btn:first-child {
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+[dir="rtl"] .btn-group .btn:last-child {
+  margin-right: 0;
+  margin-left: 0.5rem;
+}
+
 /* Loading overlay for language changes */
 .language-loading-overlay {
   position: fixed;
@@ -199,7 +370,11 @@
 
 /* Smooth transitions for language switching */
 * {
-  transition: text-align 0.3s ease, margin 0.3s ease, padding 0.3s ease, transform 0.3s ease;
+  transition:
+    text-align 0.3s ease,
+    margin 0.3s ease,
+    padding 0.3s ease,
+    transform 0.3s ease;
 }
 
 /* Disable transitions during initial load */
