@@ -213,10 +213,68 @@
     "edit": "Edit",
     "delete": "Delete",
     "noBranches": "No branches found",
+    "stats": {
+      "totalActiveBranches": "Total Active Branches",
+      "averageBranchStock": "Average Branch Stock",
+      "criticalFulfillment": "Critical Fulfillment",
+      "skusPerSite": "SKUs/Site",
+      "actionRequired": "Action Required"
+    },
     "status": {
       "active": "Active",
       "inactive": "Inactive",
       "critical": "Critical Stock"
+    },
+    "page": {
+      "subtitle": "Global logistics and localized stock control",
+      "searchPlaceholder": "Search branches...",
+      "addNewBranch": "Add New Branch",
+      "filterByRegion": "Filter by Region:",
+      "views": {
+        "grid": "Grid",
+        "map": "Map View"
+      },
+      "regions": {
+        "all": "All Global Sites",
+        "na": "North America",
+        "emea": "EMEA",
+        "apac": "APAC"
+      },
+      "card": {
+        "stockLevel": "Stock Level",
+        "requests": "Requests",
+        "manage": "Manage"
+      },
+      "geospatialDistribution": "Geospatial Distribution",
+      "distribution": {
+        "na": "North America",
+        "naSites": "8 Sites",
+        "eu": "Europe",
+        "euSites": "12 Sites",
+        "asia": "Asia",
+        "asiaSites": "4 Sites"
+      },
+      "recentActivity": {
+        "title": "Recent Branch Activity",
+        "items": {
+          "authorized": {
+            "title": "New Branch Authorized",
+            "description": "Singapore Central Hub added to network by Admin.",
+            "time": "2 hours ago"
+          },
+          "tokyoCritical": {
+            "title": "Alert: Tokyo Critical Stock",
+            "description": "Stock dropped below 15% threshold for 12 SKUs.",
+            "time": "5 hours ago"
+          },
+          "berlinAudit": {
+            "title": "Berlin Audit Completed",
+            "description": "Manager Lukas Meyer verified Q3 stock requests.",
+            "time": "Yesterday"
+          }
+        }
+      },
+      "viewFullAuditLog": "View Full Audit Log"
     },
     "form": {
       "addBranch": "Add Branch",
