@@ -196,11 +196,74 @@
     "region": "منطقه",
     "city": "شهر",
     "address": "آدرس",
-    "status": "وضعیت",
+    "statusLabel": "وضعیت",
     "actions": "اقدامات",
     "edit": "ویرایش",
     "delete": "حذف",
     "noBranches": "شعبه‌ای یافت نشد",
+    "stats": {
+      "totalActiveBranches": "مجموع شعب فعال",
+      "averageBranchStock": "میانگین موجودی شعب",
+      "criticalFulfillment": "تأمین بحرانی",
+      "skusPerSite": "SKU/شعبه",
+      "actionRequired": "نیازمند اقدام"
+    },
+    "status": {
+      "active": "فعال",
+      "inactive": "غیرفعال",
+      "critical": "موجودی بحرانی"
+    },
+    "page": {
+      "subtitle": "لجستیک جهانی و کنترل موجودی محلی",
+      "searchPlaceholder": "جستجوی شعب...",
+      "addNewBranch": "افزودن شعبه جدید",
+      "filterByRegion": "فیلتر بر اساس منطقه:",
+      "views": {
+        "grid": "شبکه‌ای",
+        "map": "نمای نقشه"
+      },
+      "regions": {
+        "all": "همه سایت‌های جهانی",
+        "na": "آمریکای شمالی",
+        "emea": "اروپا/خاورمیانه/آفریقا",
+        "apac": "آسیا-اقیانوسیه"
+      },
+      "card": {
+        "stockLevel": "سطح موجودی",
+        "requests": "درخواست‌ها",
+        "manage": "مدیریت"
+      },
+      "geospatialDistribution": "توزیع جغرافیایی",
+      "distribution": {
+        "na": "آمریکای شمالی",
+        "naSites": "۸ سایت",
+        "eu": "اروپا",
+        "euSites": "۱۲ سایت",
+        "asia": "آسیا",
+        "asiaSites": "۴ سایت"
+      },
+      "recentActivity": {
+        "title": "فعالیت‌های اخیر شعب",
+        "items": {
+          "authorized": {
+            "title": "شعبه جدید تأیید شد",
+            "description": "هاب مرکزی سنگاپور توسط مدیر به شبکه اضافه شد.",
+            "time": "۲ ساعت پیش"
+          },
+          "tokyoCritical": {
+            "title": "هشدار: موجودی بحرانی توکیو",
+            "description": "موجودی برای ۱۲ SKU به زیر آستانه ۱۵٪ کاهش یافت.",
+            "time": "۵ ساعت پیش"
+          },
+          "berlinAudit": {
+            "title": "ممیزی برلین تکمیل شد",
+            "description": "مدیر لوکاس مایر درخواست‌های موجودی سه‌ماهه سوم را تأیید کرد.",
+            "time": "دیروز"
+          }
+        }
+      },
+      "viewFullAuditLog": "مشاهده کامل گزارش ممیزی"
+    },
     "form": {
       "addBranch": "افزودن شعبه",
       "editBranch": "ویرایش شعبه",
