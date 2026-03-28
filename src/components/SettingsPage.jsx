@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useDarkMode } from "../contexts/DarkModeProvider";
 import { useAuth } from "../contexts/AuthProvider";
+import { useTranslation } from "react-i18next";
 import Loader from "./Loader";
+import LanguageToggle from "./LanguageToggle";
 
 const SettingsPage = () => {
   const { darkMode } = useDarkMode();
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [settings, setSettings] = useState({
@@ -35,21 +38,23 @@ const SettingsPage = () => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setSaving(false);
     // Show success message
-    alert("Settings saved successfully!");
+    alert(t("settings.settingsSaved"));
   };
 
   if (loading) {
-    return <Loader message="Loading Settings..." showBackground={false} />;
+    return (
+      <Loader message={t("loader.loadingSettings")} showBackground={false} />
+    );
   }
 
   return (
     <div className="p-6">
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-          Settings
+          {t("settings.title")}
         </h1>
         <p className="text-gray-600 dark:text-gray-400 mt-2">
-          Manage your account settings and preferences
+          {t("settings.subtitle")}
         </p>
       </div>
 
@@ -172,22 +177,9 @@ const SettingsPage = () => {
               </button>
             </div>
 
+            {/* Language Toggle Section */}
             <div>
-              <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-2">
-                Language
-              </h3>
-              <select
-                value={settings.language}
-                onChange={(e) =>
-                  handleSettingChange("language", e.target.value)
-                }
-                className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              >
-                <option value="en">English</option>
-                <option value="es">Spanish</option>
-                <option value="fr">French</option>
-                <option value="de">German</option>
-              </select>
+              <LanguageToggle />
             </div>
           </div>
         </div>
@@ -199,7 +191,7 @@ const SettingsPage = () => {
             disabled={saving}
             className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            {saving ? "Saving..." : "Save Settings"}
+            {saving ? t("settings.saving") : t("settings.saveSettings")}
           </button>
         </div>
       </div>
