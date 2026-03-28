@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useDarkMode } from "../contexts/DarkModeProvider";
+import { useTranslation } from "react-i18next";
 import Loader from "./Loader";
 
 const SupportPage = () => {
   const { darkMode } = useDarkMode();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [tickets, setTickets] = useState([]);
 
@@ -40,7 +42,9 @@ const SupportPage = () => {
   }, []);
 
   if (loading) {
-    return <Loader message="Loading Support..." showBackground={false} />;
+    return (
+      <Loader message={t("loader.loadingSupport")} showBackground={false} />
+    );
   }
 
   return (
