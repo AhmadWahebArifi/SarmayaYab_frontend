@@ -8,7 +8,7 @@ const ReportsPage = () => {
   const [reports, setReports] = useState([]);
 
   useEffect(() => {
-    // Simulate loading reports data
+    // Simulate loading reports data with 3-second delay
     const timer = setTimeout(() => {
       setReports([
         {
@@ -31,7 +31,7 @@ const ReportsPage = () => {
         },
       ]);
       setLoading(false);
-    }, 1000);
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, []);
