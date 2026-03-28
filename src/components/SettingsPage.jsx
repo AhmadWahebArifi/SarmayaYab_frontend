@@ -20,10 +20,10 @@ const SettingsPage = () => {
   });
 
   useEffect(() => {
-    // Simulate loading settings
+    // Simulate loading settings with 3-second delay
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 800);
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, []);
