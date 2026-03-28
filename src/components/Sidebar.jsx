@@ -2,7 +2,9 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useDarkMode } from "../contexts/DarkModeProvider";
 import { useAuth } from "../contexts/AuthProvider";
+import { useTranslation } from "react-i18next";
 import { preloadOnHover } from "../utils/preloadUtils";
+import LanguageSwitcher from "./LanguageSwitcher";
 import {
   Home,
   Inventory,
@@ -19,6 +21,7 @@ import {
 const Sidebar = ({ isOpen, toggleSidebar, closeSidebar }) => {
   const { darkMode } = useDarkMode();
   const { user, logout } = useAuth();
+  const { t } = useTranslation();
   const location = useLocation();
 
   // Preload functions for hover optimization
@@ -45,19 +48,24 @@ const Sidebar = ({ isOpen, toggleSidebar, closeSidebar }) => {
   );
 
   const menuItems = [
-    { path: "/", icon: Home, label: "Dashboard", onHover: preloadDashboard },
+    {
+      path: "/",
+      icon: Home,
+      label: t("navigation.dashboard"),
+      onHover: preloadDashboard,
+    },
     ...(user?.role === "admin" || user?.role === "warehouse_staff"
       ? [
           {
             path: "/products",
             icon: Inventory,
-            label: "Product Catalog",
+            label: t("navigation.products"),
             onHover: preloadProducts,
           },
           {
             path: "/warehouses",
             icon: Warehouse,
-            label: "Branch Management",
+            label: t("navigation.branches"),
             onHover: preloadBranches,
           },
         ]
@@ -65,19 +73,19 @@ const Sidebar = ({ isOpen, toggleSidebar, closeSidebar }) => {
     {
       path: "/stock",
       icon: RequestQuote,
-      label: "Stock Requests",
+      label: t("navigation.stockRequests"),
       onHover: preloadStock,
     },
     {
       path: "/reports",
       icon: Assessment,
-      label: "Reports",
+      label: t("navigation.reports"),
       onHover: preloadReports,
     },
     {
       path: "/settings",
       icon: Settings,
-      label: "Settings",
+      label: t("navigation.settings"),
       onHover: preloadSettings,
     },
   ];
@@ -188,8 +196,11 @@ const Sidebar = ({ isOpen, toggleSidebar, closeSidebar }) => {
                 onClick={logout}
                 className="mt-2 w-full text-xs text-left text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
               >
-                Sign out
+                {t("navigation.logout")}
               </button>
+              <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+                <LanguageSwitcher />
+              </div>
             </div>
           </div>
         </div>
