@@ -311,7 +311,8 @@
     "rejectingRequest": "Rejecting request...",
     "dispatchingRequest": "Dispatching request...",
     "markingAsDelivered": "Marking as delivered...",
-    "loadingSmartSuggestions": "Loading smart suggestions..."
+    "loadingSmartSuggestions": "Loading smart suggestions...",
+    "changingLanguage": "Changing language..."
   },
   "localization": {
     "title": "Localization Demo",
