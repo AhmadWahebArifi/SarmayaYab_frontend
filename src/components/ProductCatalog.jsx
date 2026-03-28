@@ -3,6 +3,7 @@ import { useDarkMode } from "../contexts/DarkModeProvider";
 import { useAuth } from "../contexts/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+import Loader from "./Loader";
 import {
   Search,
   Add,
@@ -49,6 +50,11 @@ const ProductCatalog = () => {
 
   const fetchProducts = async () => {
     try {
+      setLoading(true);
+
+      // Simulate 3-second loading time
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+
       const res = await api.get("/products");
       setProducts(res.data.data || res.data);
     } catch (err) {
