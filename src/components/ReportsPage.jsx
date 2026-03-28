@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useDarkMode } from "../contexts/DarkModeProvider";
+import { useTranslation } from "react-i18next";
 import Loader from "./Loader";
 
 const ReportsPage = () => {
   const { darkMode } = useDarkMode();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [reports, setReports] = useState([]);
 
@@ -37,7 +39,9 @@ const ReportsPage = () => {
   }, []);
 
   if (loading) {
-    return <Loader message="Loading Reports..." showBackground={false} />;
+    return (
+      <Loader message={t("loader.loadingReports")} showBackground={false} />
+    );
   }
 
   return (
