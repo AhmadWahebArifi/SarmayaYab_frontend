@@ -10,7 +10,7 @@ const BranchManagement = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [activeView, setActiveView] = useState("grid");
-  const [region, setRegion] = useState("All Global Sites");
+  const [region, setRegion] = useState("all");
 
   // Check if user has permission to access branch management
   useEffect(() => {
@@ -32,7 +32,7 @@ const BranchManagement = () => {
   const stats = useMemo(
     () => [
       {
-        title: "Total Active Branches",
+        title: t("branches.stats.totalActiveBranches"),
         icon: "hub",
         iconClassName: "text-primary",
         value: "24",
@@ -42,23 +42,23 @@ const BranchManagement = () => {
         deltaClassName: "text-tertiary-fixed-dim",
       },
       {
-        title: "Average Branch Stock",
+        title: t("branches.stats.averageBranchStock"),
         icon: "inventory",
         iconClassName: "text-primary",
         value: "8,420",
-        suffix: "SKUs/Site",
+        suffix: t("branches.stats.skusPerSite"),
       },
       {
-        title: "Critical Fulfillment",
+        title: t("branches.stats.criticalFulfillment"),
         icon: "priority_high",
         iconClassName: "text-error",
         value: "03",
-        suffix: "Action Required",
+        suffix: t("branches.stats.actionRequired"),
         valueClassName: "text-error",
         suffixClassName: "text-error font-bold",
       },
     ],
-    [],
+    [t],
   );
 
   const branches = useMemo(
@@ -68,7 +68,7 @@ const BranchManagement = () => {
         name: "Berlin Hub East",
         location: "Friedrichshain, Berlin, DE",
         status: {
-          label: t("common.active"),
+          label: t("branches.status.active"),
           className: "bg-tertiary-fixed text-on-tertiary-fixed-variant",
         },
         stockLevel: "12,450",
@@ -83,7 +83,7 @@ const BranchManagement = () => {
         name: "London Logistics",
         location: "Canary Wharf, London, UK",
         status: {
-          label: t("common.active"),
+          label: t("branches.status.active"),
           className: "bg-tertiary-fixed text-on-tertiary-fixed-variant",
         },
         stockLevel: "8,200",
@@ -114,7 +114,7 @@ const BranchManagement = () => {
         name: "New York Hub",
         location: "Manhattan, NY, USA",
         status: {
-          label: t("common.active"),
+          label: t("branches.status.active"),
           className: "bg-tertiary-fixed text-on-tertiary-fixed-variant",
         },
         stockLevel: "15,900",
@@ -142,10 +142,10 @@ const BranchManagement = () => {
       <header className="sticky top-0 z-40 w-full bg-surface/80 backdrop-blur-md px-8 py-4 flex justify-between items-center border-0">
         <div>
           <h2 className="font-headline font-extrabold text-2xl tracking-tight text-on-surface">
-            Branch Management
+            {t("branches.title")}
           </h2>
           <p className="text-on-surface-variant text-sm font-body">
-            Global logistics and localized stock control
+            {t("branches.page.subtitle")}
           </p>
         </div>
         <div className="flex items-center gap-4">
@@ -157,13 +157,13 @@ const BranchManagement = () => {
             </div>
             <input
               className="bg-surface-container-highest border-none rounded-sm text-sm py-2 pl-10 pr-4 focus:ring-1 focus:ring-primary/10 transition-all w-64 font-body"
-              placeholder="Search branches..."
+              placeholder={t("branches.page.searchPlaceholder")}
               type="text"
             />
           </div>
           <button className="signature-gradient text-white flex items-center gap-2 px-5 py-2.5 rounded-md font-medium text-sm hover:opacity-90 transition-all shadow-sm">
             <span className="material-symbols-outlined text-lg">add</span>
-            <span>Add New Branch</span>
+            <span>{t("branches.page.addNewBranch")}</span>
           </button>
         </div>
       </header>
@@ -239,7 +239,7 @@ const BranchManagement = () => {
                   <span className="material-symbols-outlined text-sm">
                     grid_view
                   </span>
-                  Grid
+                  {t("branches.page.views.grid")}
                 </button>
                 <button
                   type="button"
@@ -251,21 +251,25 @@ const BranchManagement = () => {
                   }
                 >
                   <span className="material-symbols-outlined text-sm">map</span>
-                  Map View
+                  {t("branches.page.views.map")}
                 </button>
               </div>
 
               <div className="flex items-center gap-4 text-xs font-medium text-on-surface-variant">
-                <span>Filter by Region:</span>
+                <span>{t("branches.page.filterByRegion")}</span>
                 <select
                   className="bg-transparent border-none focus:ring-0 text-primary font-bold cursor-pointer"
                   value={region}
                   onChange={(e) => setRegion(e.target.value)}
                 >
-                  <option>All Global Sites</option>
-                  <option>North America</option>
-                  <option>EMEA</option>
-                  <option>APAC</option>
+                  <option value="all">{t("branches.page.regions.all")}</option>
+                  <option value="na">{t("branches.page.regions.na")}</option>
+                  <option value="emea">
+                    {t("branches.page.regions.emea")}
+                  </option>
+                  <option value="apac">
+                    {t("branches.page.regions.apac")}
+                  </option>
                 </select>
               </div>
             </div>
@@ -298,7 +302,7 @@ const BranchManagement = () => {
                   <div className="grid grid-cols-2 gap-4 my-6">
                     <div className="bg-surface-container-low p-3 rounded-sm">
                       <p className="text-[10px] text-on-surface-variant uppercase font-bold tracking-tighter mb-1">
-                        Stock Level
+                        {t("branches.page.card.stockLevel")}
                       </p>
                       <p
                         className={`text-lg font-headline font-extrabold ${
@@ -310,7 +314,7 @@ const BranchManagement = () => {
                     </div>
                     <div className="bg-surface-container-low p-3 rounded-sm">
                       <p className="text-[10px] text-on-surface-variant uppercase font-bold tracking-tighter mb-1">
-                        Requests
+                        {t("branches.page.card.requests")}
                       </p>
                       <p
                         className={`text-lg font-headline font-extrabold ${
@@ -335,7 +339,7 @@ const BranchManagement = () => {
                       type="button"
                       className="text-primary hover:underline text-xs font-bold flex items-center"
                     >
-                      Manage
+                      {t("branches.page.card.manage")}
                       <span className="material-symbols-outlined text-sm ml-1">
                         chevron_right
                       </span>
@@ -350,7 +354,7 @@ const BranchManagement = () => {
             <div className="bg-surface-container-lowest rounded-md overflow-hidden shadow-sm border border-outline-variant/10">
               <div className="p-4 bg-surface-container-low flex justify-between items-center">
                 <h4 className="font-headline font-bold text-sm">
-                  Geospatial Distribution
+                  {t("branches.page.geospatialDistribution")}
                 </h4>
                 <span className="material-symbols-outlined text-sm text-on-surface-variant">
                   open_in_full
@@ -370,35 +374,51 @@ const BranchManagement = () => {
 
               <div className="p-4 space-y-3">
                 <div className="flex justify-between items-center text-xs">
-                  <span className="text-on-surface-variant">North America</span>
-                  <span className="font-bold">8 Sites</span>
+                  <span className="text-on-surface-variant">
+                    {t("branches.page.distribution.na")}
+                  </span>
+                  <span className="font-bold">
+                    {t("branches.page.distribution.naSites")}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center text-xs">
-                  <span className="text-on-surface-variant">Europe</span>
-                  <span className="font-bold">12 Sites</span>
+                  <span className="text-on-surface-variant">
+                    {t("branches.page.distribution.eu")}
+                  </span>
+                  <span className="font-bold">
+                    {t("branches.page.distribution.euSites")}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center text-xs">
-                  <span className="text-on-surface-variant">Asia</span>
-                  <span className="font-bold">4 Sites</span>
+                  <span className="text-on-surface-variant">
+                    {t("branches.page.distribution.asia")}
+                  </span>
+                  <span className="font-bold">
+                    {t("branches.page.distribution.asiaSites")}
+                  </span>
                 </div>
               </div>
             </div>
 
             <div className="bg-surface-container-lowest p-6 rounded-md shadow-sm border border-outline-variant/10">
               <h4 className="font-headline font-bold text-sm mb-6">
-                Recent Branch Activity
+                {t("branches.page.recentActivity.title")}
               </h4>
 
               <div className="space-y-6">
                 <div className="flex gap-4">
                   <div className="mt-1 w-2 h-2 rounded-full bg-primary flex-shrink-0"></div>
                   <div>
-                    <p className="text-xs font-bold">New Branch Authorized</p>
+                    <p className="text-xs font-bold">
+                      {t("branches.page.recentActivity.items.authorized.title")}
+                    </p>
                     <p className="text-[11px] text-on-surface-variant font-body mt-0.5">
-                      Singapore Central Hub added to network by Admin.
+                      {t(
+                        "branches.page.recentActivity.items.authorized.description",
+                      )}
                     </p>
                     <p className="text-[10px] text-outline mt-1 font-label">
-                      2 hours ago
+                      {t("branches.page.recentActivity.items.authorized.time")}
                     </p>
                   </div>
                 </div>
@@ -407,13 +427,19 @@ const BranchManagement = () => {
                   <div className="mt-1 w-2 h-2 rounded-full bg-error flex-shrink-0"></div>
                   <div>
                     <p className="text-xs font-bold">
-                      Alert: Tokyo Critical Stock
+                      {t(
+                        "branches.page.recentActivity.items.tokyoCritical.title",
+                      )}
                     </p>
                     <p className="text-[11px] text-on-surface-variant font-body mt-0.5">
-                      Stock dropped below 15% threshold for 12 SKUs.
+                      {t(
+                        "branches.page.recentActivity.items.tokyoCritical.description",
+                      )}
                     </p>
                     <p className="text-[10px] text-outline mt-1 font-label">
-                      5 hours ago
+                      {t(
+                        "branches.page.recentActivity.items.tokyoCritical.time",
+                      )}
                     </p>
                   </div>
                 </div>
@@ -421,12 +447,18 @@ const BranchManagement = () => {
                 <div className="flex gap-4">
                   <div className="mt-1 w-2 h-2 rounded-full bg-on-tertiary-container flex-shrink-0"></div>
                   <div>
-                    <p className="text-xs font-bold">Berlin Audit Completed</p>
+                    <p className="text-xs font-bold">
+                      {t(
+                        "branches.page.recentActivity.items.berlinAudit.title",
+                      )}
+                    </p>
                     <p className="text-[11px] text-on-surface-variant font-body mt-0.5">
-                      Manager Lukas Meyer verified Q3 stock requests.
+                      {t(
+                        "branches.page.recentActivity.items.berlinAudit.description",
+                      )}
                     </p>
                     <p className="text-[10px] text-outline mt-1 font-label">
-                      Yesterday
+                      {t("branches.page.recentActivity.items.berlinAudit.time")}
                     </p>
                   </div>
                 </div>
@@ -436,7 +468,7 @@ const BranchManagement = () => {
                 type="button"
                 className="w-full mt-8 py-2 text-xs font-bold text-on-surface-variant border border-outline-variant/30 rounded-sm hover:bg-surface-container-low transition-all"
               >
-                View Full Audit Log
+                {t("branches.page.viewFullAuditLog")}
               </button>
             </div>
           </div>
