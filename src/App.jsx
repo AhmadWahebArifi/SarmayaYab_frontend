@@ -12,6 +12,7 @@ import Sidebar from "./components/Sidebar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LoadingSpinner from "./components/LoadingSpinner";
 import { preloadAllComponents } from "./utils/preloadUtils";
+import "./i18n"; // Initialize i18n
 
 // Lazy load components
 const AdminDashboard = lazy(() => import("./components/AdminDashboard"));
