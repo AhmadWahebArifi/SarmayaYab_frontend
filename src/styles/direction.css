@@ -40,25 +40,6 @@
   border-left-color: rgb(55 65 81);
 }
 
-/* RTL sidebar mobile animations */
-[dir="rtl"] .sidebar {
-  transform: translateX(0);
-}
-
-[dir="rtl"] .sidebar:not(.translate-x-0) {
-  transform: translateX(100%);
-}
-
-@media (max-width: 1023px) {
-  [dir="rtl"] .sidebar {
-    transform: translateX(100%);
-  }
-
-  [dir="rtl"] .sidebar.translate-x-0 {
-    transform: translateX(0);
-  }
-}
-
 [dir="rtl"] .sidebar-content {
   padding-right: 1rem;
   padding-left: 1rem;
