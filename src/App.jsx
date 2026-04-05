@@ -56,6 +56,15 @@ const App = () => {
   const closeSidebar = () => setSidebarOpen(false);
 
   React.useEffect(() => {
+    if (window.innerWidth < 1024) {
+      document.body.style.overflow = sidebarOpen ? "hidden" : "";
+      return () => {
+        document.body.style.overflow = "";
+      };
+    }
+  }, [sidebarOpen]);
+
+  React.useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
         setSidebarOpen(true);
@@ -101,7 +110,11 @@ const App = () => {
                 path="/*"
                 element={
                   <RequireAuth>
-                    <div className="min-h-screen bg-surface flex">
+                    <div
+                      className={`min-h-screen bg-surface flex ${
+                        sidebarOpen ? "sidebar-open" : ""
+                      }`}
+                    >
                       <Sidebar
                         isOpen={sidebarOpen}
                         toggleSidebar={toggleSidebar}
